@@ -11,12 +11,15 @@ SRCS = stack.c queue.c priority_queue.c set.c map.c vector.c deque.c hashtable.c
 # all the object files
 OBJS = $(SRCS:.c=.o)
 
+# all the dependencies (headers)
+HEAD = $(SRCS:.c=.h)
+
 
 # everything
 all: test
 
 # tester
-test: $(OBJS) test.c
+test: $(OBJS) $(HEAD) test.c
 	$(CC) $(CFLAGS) test.c -o test $(OBJS)
 
 # magic
