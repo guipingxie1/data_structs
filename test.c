@@ -8,6 +8,7 @@
  */
  
 #include "stack_ll.h"
+#include "stack.h"
 #include "queue.h"
 #include "deque.h"
 #include "priority_queue.h"
@@ -17,6 +18,7 @@
 #include "hashtable.h" 
 
 stack_ll s;
+stack s2;
 
 int main() {
 

@@ -35,18 +35,25 @@ typedef struct stack_ll {
 
 /**
  *	Initialize the stack --- similar to a constructor in C++
+ *	Can be called with either :
+ *			stack_ll* s = malloc( sizeof(stack_ll) );
+ *			init_stack_ll( s ); 
+ *	OR
+ *			stack_ll s;
+ *			init_stack_ll( &s ); 		
  *
  * 	@param s: The stack struct we want to operate with
  */
-void init_stack( stack_ll* s );
+void init_stack_ll( stack_ll* s );
 
 
 /**
  *	Destroy the stack --- similar to a destructor in C++
+ *	Do not call any frees on the stack_ll structure yourself
  *
  * 	@param s: The stack struct we want to operate with
  */
-void destroy_stack( stack_ll* s );
+void destroy_stack_ll( stack_ll* s );
 
 
 /**
@@ -55,7 +62,7 @@ void destroy_stack( stack_ll* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return 1 (true) if the stack is empty, 0 (false) otherwise
  */
-int is_empty( stack_ll* s );
+int is_empty_stack_ll( stack_ll* s );
 
 
 /**
@@ -64,7 +71,7 @@ int is_empty( stack_ll* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return The size of the stack
  */
-int get_size( stack_ll* s );
+int get_size_stack_ll( stack_ll* s );
 
 
 /**
@@ -73,16 +80,18 @@ int get_size( stack_ll* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return The data at the top of the stack
  */
-void* top( stack_ll* s );
+void* top_stack_ll( stack_ll* s );
 
 
 /**
  *	Pushes in the data into the stack
+ *	Does NOT create a copy of the data passed in
+ *	Therefore the data should remain in scope for as long as the stacks lifetime
  *
  * 	@param s: The stack struct we want to operate with
  * 	@param data: The data we want to push into the stack
  */
-void push( stack_ll* s, void* data );  
+void push_stack_ll( stack_ll* s, void* data );  
 
 
 /**
@@ -90,7 +99,7 @@ void push( stack_ll* s, void* data );
  *
  * 	@param s: The stack struct we want to operate with
  */
-void pop( stack_ll* s );
+void pop_stack_ll( stack_ll* s );
 
 
 /**
@@ -100,7 +109,7 @@ void pop( stack_ll* s );
  * 	@param pos: The index we of the element we want to access
  * 	@return The data at the specified index
  */
-void* get_elem( stack_ll* s, int pos ); 
+void* get_elem_stack_ll( stack_ll* s, int pos ); 
 
 
 #endif

@@ -10,18 +10,17 @@
 
 #include "stack.h"
 
-/**
- * 	Using a linked list implementation
- *
- */
-typedef struct linked_list {
-	/* The data the node will be holding */
-	void* data;
+typedef struct vector {
+	/* The array we use to implement the 'vector' */
+	void** array;
+	
+	/* The current size of the array */	
+	int size;
 
-	/* The next pointer --- can be NULL to indicate the end */	
-  struct linked_list* next; 
-  
-} list_node;
+	/* The maximum capacity of the array */	
+	int capacity;
+	
+} vector;
 
 
 
@@ -37,37 +36,43 @@ void destroy_stack( stack* s ) {
 }
 
 
+/* Resizes the stack */
+void resize_stack( stack* s, int new_size ) {
+
+}
+
+
 /* Checks if the stack is empty or not */
-int is_empty( stack* s ) {
+int is_empty_stack( stack* s ) {
 
 }
 
 
 /* Returns the size of the stack */
-int get_size( stack* s ) {
+int get_size_stack( stack* s ) {
 
 }
 
 
 /* Returns the data at the top of the stack */
-void* top( stack* s ) {
+void* top_stack( stack* s ) {
 
 }
 
 
 /* Pushes in the data into the stack */
-void push( stack* s, void* data ) {
+void push_stack( stack* s, void* data ) {
 
 } 
 
 
 /* Remove the last element (data) pushed into the stack */
-void pop( stack* s ) {
+void pop_stack( stack* s ) {
 
 }
 
 
 /* Returns the element (data) at the specified index of the stack */
-void* get_elem( stack* s, int pos ) {
+void* get_elem_stack( stack* s, int pos ) {
 
 } 
