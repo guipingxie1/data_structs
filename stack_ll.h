@@ -11,7 +11,7 @@
 #ifndef STACKLL_H 
 #define STACKLL_H
 
-/* Stack cannot be bigger than 65536 */	
+/* 	Stack cannot be bigger than 65536  */	
 #define STACKLL_MAX_CAP 65536
 
 
@@ -21,11 +21,18 @@
  *
  */
 typedef struct stack_ll {
-	/* The tail of the linked list struct */	
+	/* 	The tail of the linked list struct  */	
 	struct linked_list* tail;
 	
-	/* The head of the linked list struct (used for iterating) */	
+	/* 	The head of the linked list struct (used for iterating)  */	
 	struct linked_list* head;
+	
+	/**
+	 * 	The permanent head of the linked list struct 
+	 * 	Used to indicate all malloc'd blocks since we use
+	 *	a lazy allocation method for increased performance
+	 */	
+	struct linked_list* perm_head;
 
 	/* The current size of the stack */		
 	int size;

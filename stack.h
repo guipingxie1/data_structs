@@ -11,7 +11,7 @@
 #ifndef STACK_H 
 #define STACK_H
 
-/* Stack cannot be bigger than 65536 */	
+/*	Stack cannot be bigger than 65536  */	
 #define STACK_MAX_CAP 65536
 
 
@@ -21,7 +21,7 @@
  *
  */
 typedef struct stack {
-	/* The vector we use to implement the stack */
+	/*	The vector we use to implement the stack  */
 	struct vector v;
   
 } stack;
