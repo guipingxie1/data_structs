@@ -1,18 +1,18 @@
 /**
- * 	@file: stack.h
+ * 	@file: stack_ll.h
  * 	@author: Guiping Xie 
  *
- * 	@description: Stack data structure header file
+ * 	@description: Stack data structure (linked list implementation) header file
  *	@date: Spring 2016
  *
  */
  
 
-#ifndef STACK_H 
-#define STACK_H
+#ifndef STACKLL_H 
+#define STACKLL_H
 
 /* Stack cannot be bigger than 65536 */	
-#define STACK_MAX_CAP 65536
+#define STACKLL_MAX_CAP 65536
 
 
 /**
@@ -20,7 +20,7 @@
  *	Implemented with a linked list
  *
  */
-typedef struct stack {
+typedef struct stack_ll {
 	/* The tail of the linked list struct */	
 	struct linked_list* tail;
 	
@@ -30,7 +30,7 @@ typedef struct stack {
 	/* The current size of the stack */		
 	int size;
   
-} stack;
+} stack_ll;
 
 
 /**
@@ -38,7 +38,7 @@ typedef struct stack {
  *
  * 	@param s: The stack struct we want to operate with
  */
-void init_stack( stack* s );
+void init_stack( stack_ll* s );
 
 
 /**
@@ -46,7 +46,7 @@ void init_stack( stack* s );
  *
  * 	@param s: The stack struct we want to operate with
  */
-void destroy_stack( stack* s );
+void destroy_stack( stack_ll* s );
 
 
 /**
@@ -55,7 +55,7 @@ void destroy_stack( stack* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return 1 (true) if the stack is empty, 0 (false) otherwise
  */
-int is_empty( stack* s );
+int is_empty( stack_ll* s );
 
 
 /**
@@ -64,7 +64,7 @@ int is_empty( stack* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return The size of the stack
  */
-int get_size( stack* s );
+int get_size( stack_ll* s );
 
 
 /**
@@ -73,7 +73,7 @@ int get_size( stack* s );
  * 	@param s: The stack struct we want to operate with
  * 	@return The data at the top of the stack
  */
-void* top( stack* s );
+void* top( stack_ll* s );
 
 
 /**
@@ -82,7 +82,7 @@ void* top( stack* s );
  * 	@param s: The stack struct we want to operate with
  * 	@param data: The data we want to push into the stack
  */
-void push( stack* s, void* data );  
+void push( stack_ll* s, void* data );  
 
 
 /**
@@ -90,7 +90,7 @@ void push( stack* s, void* data );
  *
  * 	@param s: The stack struct we want to operate with
  */
-void pop( stack* s );
+void pop( stack_ll* s );
 
 
 /**
@@ -100,7 +100,7 @@ void pop( stack* s );
  * 	@param pos: The index we of the element we want to access
  * 	@return The data at the specified index
  */
-void* get_elem( stack* s, int pos ); 
+void* get_elem( stack_ll* s, int pos ); 
 
 
 #endif

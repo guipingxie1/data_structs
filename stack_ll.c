@@ -1,5 +1,5 @@
 /**
- * 	@file: stack.c
+ * 	@file: stack_ll.c
  * 	@author: Guiping Xie 
  *
  * 	@description: Stack data structure 
@@ -8,7 +8,7 @@
  */
  
 
-#include "stack.h"
+#include "stack_ll.h"
 
 /**
  * 	Using a linked list implementation
@@ -26,48 +26,48 @@ typedef struct linked_list {
 
 
 /* Initialize the stack --- similar to a constructor in C++ */
-void init_stack( stack* s ) {
+void init_stack( stack_ll* s ) {
 	
 }
 
 
 /* Destroy the stack --- similar to a destructor in C++ */
-void destroy_stack( stack* s ) {
+void destroy_stack( stack_ll* s ) {
 
 }
 
 
 /* Checks if the stack is empty or not */
-int is_empty( stack* s ) {
+int is_empty( stack_ll* s ) {
 
 }
 
 
 /* Returns the size of the stack */
-int get_size( stack* s ) {
+int get_size( stack_ll* s ) {
 
 }
 
 
 /* Returns the data at the top of the stack */
-void* top( stack* s ) {
+void* top( stack_ll* s ) {
 
 }
 
 
 /* Pushes in the data into the stack */
-void push( stack* s, void* data ) {
+void push( stack_ll* s, void* data ) {
 
 } 
 
 
 /* Remove the last element (data) pushed into the stack */
-void pop( stack* s ) {
+void pop( stack_ll* s ) {
 
 }
 
 
 /* Returns the element (data) at the specified index of the stack */
-void* get_elem( stack* s, int pos ) {
+void* get_elem( stack_ll* s, int pos ) {
 
 } 
