@@ -1,3 +1,12 @@
+/**
+ * 	@file: stl_test.cpp
+ * 	@author: Guiping Xie 
+ *
+ * 	@description: Tests the stl data structures
+ *	@date: Spring 2016
+ *
+ */
+
 #include <stack>
 #include <queue>				// contains both queue, priority queue
 #include <deque>
@@ -60,9 +69,6 @@ void stack_testint() {
 		for ( int i = 0; i < 65536; ++i ) 
 			s.pop();	
 	}
-	
-	for ( int i = 0; i < 65536; ++i ) 
-		s.push( i );
 }
 
 

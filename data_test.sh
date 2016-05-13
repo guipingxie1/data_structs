@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# chmod +x bash_script_name
+# Script to time implementations against stl
+# Change permissions: chmod +x bash_script_name
+
 
 # exit if anything fails
 set -e
@@ -24,11 +26,11 @@ set +e
 # newline for clearity
 echo ''
 
-echo Time for stack_ll 
+echo Time for stack_ll
 time time_hundred_iter ./test stackll
 echo ''
 
-echo Time for stack (array)
+echo Time for stack-array
 time time_hundred_iter ./test stack
 echo ''
 

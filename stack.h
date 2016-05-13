@@ -11,8 +11,8 @@
 #ifndef STACK_H 
 #define STACK_H
 
-/*	Stack cannot be bigger than 65536  */	
-#define STACK_MAX_CAP 65536
+/*	Stack cannot be bigger than 131072  */	
+#define STACK_MAX_CAP 131073
 
 
 /**
@@ -21,14 +21,29 @@
  *
  */
 typedef struct stack {
-	/*	The vector we use to implement the stack  */
-	struct vector* v;
+	/*	The array we use to implement the vector  */
+	void** array;
+	
+	/*	The current size of the array  */	
+	int size;
+	
+	/*	The maximum size of the array (used for freeing)  */	
+	int max_size;
+
+	/*	The maximum capacity of the array  */	
+	int capacity;
   
 } stack;
 
 
 /**
  *	Initialize the stack --- similar to a constructor in C++
+ *	Can be called with either :
+ *			stack* s = malloc( sizeof(stack) );
+ *			init_stack( s ); 
+ *	OR
+ *			stack s;
+ *			init_stack( &s ); 		
  *
  * 	@param s: The stack struct we want to operate with
  */
@@ -75,6 +90,7 @@ int get_size_stack( stack* s );
 
 /**
  *	Returns the data at the top of the stack
+ *	Can manipulate the data in place and changes will be reflected in the stack 
  *
  * 	@param s: The stack struct we want to operate with
  * 	@return The data at the top of the stack
@@ -84,6 +100,8 @@ void* top_stack( stack* s );
 
 /**
  *	Pushes in the data into the stack
+ *	Does NOT create a copy of the data passed in
+ *	Therefore the data should remain in scope for as long as the stacks lifetime 
  *
  * 	@param s: The stack struct we want to operate with
  * 	@param data: The data we want to push into the stack
@@ -93,6 +111,7 @@ void push_stack( stack* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
+ *	This does NOT free the data 
  *
  * 	@param s: The stack struct we want to operate with
  */
@@ -101,9 +120,10 @@ void pop_stack( stack* s );
 
 /**
  *	Returns the element (data) at the specified index of the stack
+ *	Stack is 0-indexed therefore the first element is at index 0
  *
  * 	@param s: The stack struct we want to operate with
- * 	@param pos: The index we of the element we want to access
+ * 	@param pos: The index we of the element we want to access (0-indexed)
  * 	@return The data at the specified index
  */
 void* get_elem_stack( stack* s, int pos ); 

@@ -101,7 +101,7 @@ void* top_stack_ll( stack_ll* s ) {
 /*	Pushes in the data into the stack  */
 void push_stack_ll( stack_ll* s, void* data ) {	
 	assert( s && "Stack is not valid" );
-	assert( (s -> size < STACKLL_MAX_CAP) && "Too many elements, max of 65536" );
+	assert( (s -> size < STACKLL_MAX_CAP) && "Too many elements, max of 131072" );
 	
 	/*	This will only be true the first time we push  */
 	if ( s -> perm_head == NULL ) {		

@@ -83,9 +83,6 @@ void stack_testint_ll() {
 			pop_stack_ll( &s );		
 	}
 	
-	for ( int i = 0; i < 65536; ++i ) 
-		push_stack_ll( &s, &i );
-	
 	destroy_stack_ll( &s, 0 );
 }
 
@@ -102,7 +99,7 @@ void stack_teststruct() {
 	int t = 5;
 	
 	while ( t-- ) {	
-		for ( int i = 0; i < 128; ++i ) {
+		for ( int i = 0; i < 16384; ++i ) {
 			struct tester* x = malloc( sizeof(struct tester) );
 			x -> k = i;
 			x -> c = i % 26 + 'a';
@@ -110,39 +107,31 @@ void stack_teststruct() {
 			push_stack( &s, x );
 		}
 	
-		for ( int i = 0; i < 128; ++i ) {
+		for ( int i = 0; i < 16384; ++i ) {
 			struct tester* data = top_stack( &s );
-			//printf("%d %c %f --- ", data -> k, data -> c, data -> g);
 			pop_stack( &s );
 			free( data );
 		}
-		
-		//printf("\n");
 	}
 	
-	for ( int i = 0; i < 16384; ++i ) {
-		struct tester* x = malloc( sizeof(struct tester) );
-		x -> k = i;
-		x -> c = i % 26 + 'a';
-		x -> g = i * i / 3.0;
-		push_stack( &s, x );
-	}
-	
-	destroy_stack( &s, 1 );
+	destroy_stack( &s, 0 );
 }
 
 void stack_testint() {
 	stack s;
 	init_stack( &s );
+	//resize_stack( &s, 65536 );			// testing speedup
 
 	int t = 5;
 	
 	while ( t-- ) {	
 		for ( int i = 0; i < 16384; ++i ) 
 			push_stack( &s, &i );
-	
+
 		for ( int i = 0; i < 16384; ++i ) 
 			pop_stack( &s );
+			
+		//resize_stack(&s, 0);	
 			
 		for ( int i = 0; i < 65536; ++i ) 
 			push_stack( &s, &i );	
@@ -156,9 +145,6 @@ void stack_testint() {
 		for ( int i = 0; i < 65536; ++i ) 
 			pop_stack( &s );		
 	}
-	
-	for ( int i = 0; i < 65536; ++i ) 
-		push_stack( &s, &i );
 	
 	destroy_stack( &s, 0 );
 }
@@ -174,7 +160,7 @@ int main( int argc, char* argv[] ) {
 	}
 	else if ( strcmp(arg, "stack") == 0 ) {
 		stack_testint();
-		//stack_teststruct();
+		stack_teststruct();
 	}
 	else if ( strcmp(arg, "set") == 0 ) {
 		

@@ -11,8 +11,8 @@
 #ifndef STACKLL_H 
 #define STACKLL_H
 
-/* 	Stack cannot be bigger than 65536  */	
-#define STACKLL_MAX_CAP 65536
+/* 	Stack cannot be bigger than 131072  */	
+#define STACKLL_MAX_CAP 131072
 
 
 /**
