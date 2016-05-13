@@ -22,7 +22,7 @@
  */
 typedef struct stack {
 	/*	The vector we use to implement the stack  */
-	struct vector v;
+	struct vector* v;
   
 } stack;
 
@@ -37,10 +37,13 @@ void init_stack( stack* s );
 
 /**
  *	Destroy the stack --- similar to a destructor in C++
+ *	Do not call any frees on the stack structure yourself 
  *
  * 	@param s: The stack struct we want to operate with
+ * 	@param free_data: Whether we should free the data or not, 0 - don't free
+ *											Do NOT free when data is on the stack 
  */
-void destroy_stack( stack* s );
+void destroy_stack( stack* s, int free_data );
 
 
 /**

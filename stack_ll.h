@@ -18,6 +18,8 @@
 /**
  * 	The stack struct the user will use
  *	Implemented with a linked list
+ *	Can only hold up to 65536 elements
+ *	Stay consistant with data pushed into the stack 
  *
  */
 typedef struct stack_ll {
@@ -56,11 +58,13 @@ void init_stack_ll( stack_ll* s );
 
 /**
  *	Destroy the stack --- similar to a destructor in C++
- *	Do not call any frees on the stack_ll structure yourself
+ *	Do NOT call any frees on the stack_ll structure yourself
  *
  * 	@param s: The stack struct we want to operate with
+ * 	@param free_data: Whether we should free the data or not, 0 - don't free
+ *											Do NOT free when data is on the stack
  */
-void destroy_stack_ll( stack_ll* s );
+void destroy_stack_ll( stack_ll* s, int free_data );
 
 
 /**
@@ -83,6 +87,7 @@ int get_size_stack_ll( stack_ll* s );
 
 /**
  *	Returns the data at the top of the stack
+ *	Can manipulate the data in place and changes will be reflected in the stack
  *
  * 	@param s: The stack struct we want to operate with
  * 	@return The data at the top of the stack
@@ -103,6 +108,7 @@ void push_stack_ll( stack_ll* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
+ *	This does NOT free the data
  *
  * 	@param s: The stack struct we want to operate with
  */
@@ -111,9 +117,10 @@ void pop_stack_ll( stack_ll* s );
 
 /**
  *	Returns the element (data) at the specified index of the stack
+ *	Stack is 0-indexed therefore the first element is at index 0
  *
  * 	@param s: The stack struct we want to operate with
- * 	@param pos: The index we of the element we want to access
+ * 	@param pos: The index we of the element we want to access (0-indexed)
  * 	@return The data at the specified index
  */
 void* get_elem_stack_ll( stack_ll* s, int pos ); 

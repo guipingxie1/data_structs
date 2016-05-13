@@ -7,7 +7,11 @@
  *
  */
  
+//#define NDEBUG 					// disable assert statements
 #include <assert.h>
+#include <stddef.h>				// for NULL definition
+#include <stdlib.h>				// for malloc, free
+#include <stdio.h> 
 
 #include "stack_ll.h"
 
@@ -41,9 +45,29 @@ void init_stack_ll( stack_ll* s ) {
 
 
 /*	Destroy the stack --- similar to a destructor in C++  */
-void destroy_stack_ll( stack_ll* s ) {
+void destroy_stack_ll( stack_ll* s, int free_data ) {
 	assert( s && "Stack is not valid" );
 		
+	list_node* node = s -> perm_head;
+	list_node* copy = NULL;
+	
+	if ( free_data ) {
+		while ( node != NULL ) {
+			//printf("%p ", node);
+			free( node -> data );
+			copy = node;
+			node = node -> next;
+			free( copy );
+		}
+	}
+	else {
+		while ( node != NULL ) {
+			//printf("%p ", node);
+			copy = node;
+			node = node -> next;
+			free( copy );
+		}
+	}
 }
 
 
@@ -59,6 +83,7 @@ int is_empty_stack_ll( stack_ll* s ) {
 int get_size_stack_ll( stack_ll* s ) {
 	assert( s && "Stack is not valid" );
 	
+	return s -> size;
 }
 
 
@@ -66,21 +91,31 @@ int get_size_stack_ll( stack_ll* s ) {
 void* top_stack_ll( stack_ll* s ) {
 	assert( s && "Stack is not valid" );
 	
+	list_node* node = s -> tail;
+	assert( node && "Cannot get top element, stack is empty" );
+	
+	return node -> data;
 }
 
 
 /*	Pushes in the data into the stack  */
 void push_stack_ll( stack_ll* s, void* data ) {	
 	assert( s && "Stack is not valid" );
+	assert( (s -> size < STACKLL_MAX_CAP) && "Too many elements, max of 65536" );
 	
-	if ( s -> perm_head == NULL ) {
-		assert( (s -> tail == s -> head == NULL) && "Stack management went wrong" );
-		
+	/*	This will only be true the first time we push  */
+	if ( s -> perm_head == NULL ) {		
 		list_node* node = malloc( sizeof(list_node) );
 		node -> data = data;
 		node -> next = NULL;
 		node -> prev = NULL;
 		s -> perm_head = s -> head = s -> tail = node;
+	}
+	else if ( s -> size == 0 ) {
+		/*	Case where we initialized the stack but popped everything out of it  */
+		list_node* node = s -> perm_head;
+		node -> data = data;
+		s -> tail = node;
 	}
 	else {
 		/**
@@ -99,6 +134,7 @@ void push_stack_ll( stack_ll* s, void* data ) {
 			node -> data = data;
 			node -> next = NULL;
 			node -> prev = s -> tail;
+			s -> tail -> next = node;
 			s -> tail = node;
 		} 
 	}
@@ -114,19 +150,28 @@ void push_stack_ll( stack_ll* s, void* data ) {
  */
 void pop_stack_ll( stack_ll* s ) {
 	assert( s && "Stack is not valid" );
-	assert( (s -> tail != NULL) && "Cannot pop from empty stack" );
+	assert( s -> tail && "Cannot pop from empty stack" );
 	
-	s -> tail = s -> prev;
+	s -> tail = s -> tail -> prev;
 	s -> size -= 1;
-	
-	if ( s -> tail == NULL )		// no need?
-		s -> head == NULL;
 }
 
 
 /*	Returns the element (data) at the specified index of the stack  */
 void* get_elem_stack_ll( stack_ll* s, int pos ) {
 	assert( s && "Stack is not valid" );
-	assert( (pos > -1 && pos <= size) && "Invalid index" );
+	assert( (pos > -1 && pos <= s -> size) && "Invalid index" );
 	
+	int idx = 0;
+	list_node* node = s -> head;
+	assert( node && "Stack is empty" );
+	
+	while ( idx != pos ) {
+		assert( node -> next && "Stack management went wrong" );
+		
+		node = node -> next;
+		++idx;
+	}
+	
+	return node -> data;
 } 

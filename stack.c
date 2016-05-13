@@ -7,6 +7,9 @@
  *
  */
  
+//#define NDEBUG 				// disable assert statements
+#include <assert.h>
+#include <stddef.h>			// for NULL definition
 
 #include "stack.h"
 
@@ -31,7 +34,7 @@ void init_stack( stack* s ) {
 
 
 /*	Destroy the stack --- similar to a destructor in C++  */
-void destroy_stack( stack* s ) {
+void destroy_stack( stack* s, int free_data ) {
 
 }
 
