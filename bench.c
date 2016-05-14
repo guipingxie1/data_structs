@@ -17,6 +17,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <sys/times.h>
 #include <fcntl.h>
 
 
@@ -82,23 +83,43 @@ void time_function( char* args[] ) {
 		strcat( exec_cmd, " 0" );
 		int k = -1;
 		
+		struct tms start_time, end_time;
+		clock_t begin, end;
+		begin = times( &start_time );
+/*		
 		struct timespec begin, end;
 		clock_gettime(CLOCK_MONOTONIC, &begin);
-		
+		clock_t start_time = clock();
+*/		
 		for ( int i = 0; i < 100; ++i ) {
 			k = system( exec_cmd );
 			assert( (k != -1) && "Execution for time failed" );
 		}
-		
+/*		
 		clock_gettime(CLOCK_MONOTONIC, &end); 
 		
 		/*	Seconds  */
-		double diff = end.tv_sec - begin.tv_sec;
+		//double diff = end.tv_sec - begin.tv_sec;
 		
 		/*	Nanoseconds  */
-		diff += (double)(end.tv_nsec - begin.tv_nsec) / 1000000000;
+		//diff += (double)(end.tv_nsec - begin.tv_nsec) / 1000000000;
+/*		
+		printf( "  Wall time (100 iterations in seconds): %f\n", (double)diff );	
 		
-		printf( "  Wall time (seconds): %f\n", (double)diff );		
+		clock_t end_time = clock();
+		double cpu_time = (double)( end_time - start_time ) / CLOCKS_PER_SEC;
+			
+		printf( "  CPU time (100 iterations in seconds): %f\n", cpu_time );
+*/		
+
+		end = times( &end_time );
+		
+		printf( "  %f %f %f %f %f %f \n", end, begin, end_time.tms_utime, start_time.tms_utime, end_time.tms_stime, start_time.tms_stime );
+		
+		printf( "  Real time (100 iterations in seconds): %f\n", end - begin );
+		printf( "  User time (100 iterations in seconds): %f\n", end_time.tms_utime - start_time.tms_utime );
+		printf( "  System time (100 iterations in seconds): %f\n", end_time.tms_stime - start_time.tms_stime );
+		
 		exit( 0 );
 	}
 

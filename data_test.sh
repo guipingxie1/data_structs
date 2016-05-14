@@ -15,28 +15,43 @@ mkdir -p stl_stack
 # make so we have the newest version
 make
 
-
+# read in the data structure we want to test
+# 
+# stack, queue, vector, pqueue, deque, map, set, hash, all
+#
+echo ''
+echo 'Input the data structure you want to test'
+read data_struct
 
 # don't exit if any of the testers fail
 set +e
 
-# newline for clearity
+# newline for clarity
 echo ''
 
-echo Time of stack_ll
-./bench ./test stackll stackll/stackll.txt
+if [ "$data_struct" == "stack" ] || [ "$data_struct" == "all" ] 
+then
+	echo Time of stack --- linked list implementation
+	./bench ./test stackll stackll/stackll.txt
 
-echo Time of stack-array
-./bench ./test stack stack/stack.txt
+	echo Time of stack --- array implementation
+	./bench ./test stack stack/stack.txt
 
-echo Time of std::stack
-./bench ./stl_test stack stl_stack/stack.txt
+	echo Time of std::stack --- c++ library
+	./bench ./stl_test stack stl_stack/stack.txt
 
-diff -r stackll/stackll.txt stl_stack/stack.txt
-diff -r stack/stack.txt stl_stack/stack.txt
+	diff -r stackll/stackll.txt stl_stack/stack.txt
+	diff -r stack/stack.txt stl_stack/stack.txt
 
-echo Test completed!
+	echo Test of stack completed!
 
-rm -r stackll
-rm -r stack
-rm -r stl_stack
+	rm -r stackll
+	rm -r stack
+	rm -r stl_stack
+	echo ''
+fi
+	
+if [ "$data_struct" == "vector" ] || [ "$data_struct" == "all" ]
+then
+	echo Time of vector
+fi	

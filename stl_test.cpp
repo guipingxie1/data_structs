@@ -13,6 +13,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <unordered_set>		// hashtable
 
 #include <string>
 #include <cassert>
