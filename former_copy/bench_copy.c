@@ -18,7 +18,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/times.h>
-#include <sys/resource.h>
 #include <fcntl.h>
 
 
@@ -66,69 +65,8 @@ void child_helper( FILE* ptr, const char** exec_arr ) {
 
 
 /**
- *	Gets the program time and max memory usage 
- *	Uses rusage to time and get max memory
- *
- * 	@param pid: The pid of the execution child
- */
-void benchmark( pid_t pid ) {
-	/*	Structs we need for benchmarking  */
-	struct timespec r_begin, r_end;
-	struct rusage usage;
-	struct timeval u_begin, u_end, s_begin, s_end;
-	long mem_begin, mem_end;
-	
-	/*	Get the current usage details  */
-	assert( (getrusage( RUSAGE_CHILDREN, &usage ) != -1) && "Cannot benchmark" );
-	
-	/*	User time  */
-	u_begin = usage.ru_utime;
-	
-	/*	System time  */
-	s_begin = usage.ru_stime;
-	
-	/*	Max memory usage  */
-	mem_begin = usage.ru_maxrss;
-	
-	/*	Get the real (wall) clock time  */
-	clock_gettime(CLOCK_MONOTONIC, &r_begin);
-
-	wait_helper( pid );
-	
-	/*	Get the child usage details (after waiting for it) */
-	assert( (getrusage( RUSAGE_CHILDREN, &usage ) != -1) && "Cannot benchmark" );
-	u_end = usage.ru_utime;
-	s_end = usage.ru_stime;
-	
-	clock_gettime(CLOCK_MONOTONIC, &r_end); 	
-	
-	/*	Seconds  */
-	double r_diff = r_end.tv_sec - r_begin.tv_sec;
-	
-	/*	Nanoseconds  */
-	r_diff += (double)(r_end.tv_nsec - r_begin.tv_nsec) / 1000000000;
-	
-	double u_diff = u_end.tv_sec - u_begin.tv_sec;
-	
-	/*	Microseconds  */
-	u_diff += (double)(u_end.tv_usec - u_begin.tv_usec) / 1000000;
-	
-	double s_diff = s_end.tv_sec - s_begin.tv_sec;
-	s_diff += (double)(s_end.tv_usec - s_begin.tv_usec) / 1000000;
-
-	printf( "  Real time (100 iterations in seconds): %f\n", r_diff );
-	printf( "  User time (100 iterations in seconds): %f\n", u_diff );
-	printf( "  System time (100 iterations in seconds): %f\n", s_diff );
-	
-	mem_end = usage.ru_maxrss;
-	long max_mem = mem_end - mem_begin;
-	printf( "  Maximum heap memory usage (in kilobytes): %ld\n", max_mem );
-}
-
-
-/**
- *	Runs the program 100 times and then benchmarks the child
- *	Calls benchmark to get the program time and max memory usage 
+ *	Gets the program memory usage with valgrind
+ *	Also calls time_function
  *
  * 	@param args: Char array of function, data structure we are testing, output file 
  */
@@ -144,16 +82,50 @@ void time_function( char* args[] ) {
 		strcat( exec_cmd, args[2] );
 		strcat( exec_cmd, " 0" );
 		int k = -1;
-		
+
+/*		
+		struct tms start_time, end_time;
+		clock_t begin, end;
+		begin = times( &start_time );
+*/
+/*		
+		struct timespec begin, end;
+		clock_gettime(CLOCK_MONOTONIC, &begin);
+		clock_t start_time = clock();
+*/		
 		for ( int i = 0; i < 100; ++i ) {
 			k = system( exec_cmd );
 			assert( (k != -1) && "Execution for time failed" );
 		}
-
+/*		
+		clock_gettime(CLOCK_MONOTONIC, &end); 
+		
+		/*	Seconds  */
+		//double diff = end.tv_sec - begin.tv_sec;
+		
+		/*	Nanoseconds  */
+		//diff += (double)(end.tv_nsec - begin.tv_nsec) / 1000000000;
+/*		
+		printf( "  Wall time (100 iterations in seconds): %f\n", (double)diff );	
+		
+		clock_t end_time = clock();
+		double cpu_time = (double)( end_time - start_time ) / CLOCKS_PER_SEC;
+			
+		printf( "  CPU time (100 iterations in seconds): %f\n", cpu_time );
+*/		
+/*
+		end = times( &end_time );
+		
+		printf( "  %f %f %f %f %f %f \n", end, begin, end_time.tms_utime, start_time.tms_utime, end_time.tms_stime, start_time.tms_stime );
+		
+		printf( "  Real time (100 iterations in seconds): %f\n", end - begin );
+		printf( "  User time (100 iterations in seconds): %f\n", end_time.tms_utime - start_time.tms_utime );
+		printf( "  System time (100 iterations in seconds): %f\n", end_time.tms_stime - start_time.tms_stime );
+*/		
 		exit( 0 );
 	}
-	
-	benchmark( timer );
+
+	wait_helper( timer );
 }
 
 
@@ -196,8 +168,7 @@ void get_valgrind( char* args[] ) {
 	char* mem;
 	while ( getline(&line, &n, valgrind) != -1 ) {
 		if ( (mem = strstr(line, "total heap usage:")) != NULL ) {
-			printf( "  Memory Usage (valgrind):\n" );
-			printf( "    %s\n", mem + 18 );
+			printf( "  %s\n", mem + 18 );
 			break;
 		}
 	}
@@ -248,6 +219,7 @@ int main( int argc, char* argv[] ) {
 	assert( argc == 4 );
 	
 	get_valgrind( argv );
-	get_file( argv );	
+	get_file( argv );
+	
 	return 0;
 }
