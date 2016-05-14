@@ -1,3 +1,12 @@
+/**
+ * 	@file: time_val_test.c
+ * 	@author: Guiping Xie 
+ *
+ * 	@description: Executable helper for testing implementation
+ *	@date: Spring 2016
+ *
+ */
+
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
@@ -101,7 +110,7 @@ void get_valgrind( char* args[] ) {
 		const char* objdump_args[4];
 		objdump_args[0] = "objdump";
 		objdump_args[1]	= "--dwarf=decodedline";
-		objdump_args[2]	= program;
+		objdump_args[2]	= args[1];
 		objdump_args[3] = NULL;
 		
 		child_helper( valgrind, objdump_args );
@@ -124,9 +133,17 @@ void get_valgrind( char* args[] ) {
 }
 
 
+/**
+ *	Runs 
+ *
+ * 	@param argc: The number of arguments 
+ * 	@param argv: The char array of arguments
+ */
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
 	
 	get_valgrind( argv );
 	
+	
+	return 0;
 }

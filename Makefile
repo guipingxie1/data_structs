@@ -8,8 +8,13 @@ CFLAGS = -g -std=c99
 # all the source files
 SRCS = stack_ll.c stack.c queue.c priority_queue.c set.c map.c vector.c deque.c hashtable.c
 
+# objects location
+LOC = object_files/
+
 # all the object files
-OBJS = $(SRCS:.c=.o)
+# moves the object files to a different folder so directory is not as cluttered
+OBJS_TMP = $(SRCS:.c=.o)
+OBJS = $(patsubst %.o, $(LOC)%.o, $(OBJS_TMP))
 
 # all the dependencies (headers)
 HEAD = $(SRCS:.c=.h)
@@ -27,13 +32,13 @@ timer: time_val_test.c
 	$(CC) $(CFLAGS) time_val_test.c -o time_val_test
 
 # tester
-test: $(OBJS) $(HEAD) test.c
+test: $(OBJS_TMP) $(HEAD) test.c
 	$(CC) $(CFLAGS) test.c -o test $(OBJS)
 
 # magic
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $(LOC)$@
 
 # clean up
 clean: 
-	$(RM) *.o test
+	$(RM) $(LOC)*.o test stl_test time_val_test
