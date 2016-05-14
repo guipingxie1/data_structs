@@ -1,5 +1,6 @@
 #
 # 	Makefile for all the data structures
+#				also includes benchmark testing 
 #
 
 CC = gcc
@@ -21,24 +22,24 @@ HEAD = $(SRCS:.c=.h)
 
 
 # everything
-all: test stl timer
+all: test stl_test bench
 
 # all stl commands
-stl: stl_test.cpp
+stl_test: stl_test.cpp
 	g++ -std=c++11 -g stl_test.cpp -o stl_test
 
 # gets time and memory usage of the function	
-timer: time_val_test.c
-	$(CC) $(CFLAGS) time_val_test.c -o time_val_test
+bench: bench.c
+	$(CC) $(CFLAGS) bench.c -o bench
 
 # tester
-test: $(OBJS_TMP) $(HEAD) test.c
+test: $(OBJS) $(HEAD) test.c
 	$(CC) $(CFLAGS) test.c -o test $(OBJS)
 
 # magic
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $(LOC)/$@
+$(LOC)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # clean up
 clean: 
-	$(RM) $(LOC)*.o test stl_test time_val_test
+	$(RM) $(LOC)/*.o test stl_test bench
