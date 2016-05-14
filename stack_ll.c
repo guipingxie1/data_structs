@@ -7,11 +7,11 @@
  *
  */
  
-//#define NDEBUG 					// disable assert statements
+#define NDEBUG 					// disable assert statements
 #include <assert.h>
 #include <stddef.h>				// for NULL definition
 #include <stdlib.h>				// for malloc, free
-#include <stdio.h> 
+//#include <stdio.h> 
 
 #include "stack_ll.h"
 

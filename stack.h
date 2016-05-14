@@ -18,6 +18,8 @@
 /**
  * 	The stack struct the user will use
  *	Implemented with an array
+ *	Can only hold up to 131072 elements
+ *	Stay consistant with data pushed into the stack  
  *
  */
 typedef struct stack {
@@ -111,7 +113,9 @@ void push_stack( stack* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
- *	This does NOT free the data 
+ *	This does NOT free the data if it was initialized in the heap
+ *	In order to free the data, should call top_stack to get the top element
+ *			then free that data and then call pop_stack
  *
  * 	@param s: The stack struct we want to operate with
  */

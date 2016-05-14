@@ -18,7 +18,7 @@
 /**
  * 	The stack struct the user will use
  *	Implemented with a linked list
- *	Can only hold up to 65536 elements
+ *	Can only hold up to 131072 elements
  *	Stay consistant with data pushed into the stack 
  *
  */
@@ -108,7 +108,9 @@ void push_stack_ll( stack_ll* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
- *	This does NOT free the data
+ *	This does NOT free the data if it was initialized in the heap
+ *	In order to free the data, should call top_stack_ll to get the top element
+ *			then free that data and then call pop_stack_ll 
  *
  * 	@param s: The stack struct we want to operate with
  */

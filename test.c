@@ -23,6 +23,103 @@
 #include "hashtable.h" 
 
 
+void stack_teststruct_ll_p() {
+	struct tester {
+		int k;
+		char c;
+		double g;
+	};
+
+	stack_ll s;
+	init_stack_ll( &s );
+
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_stack_ll( &s, x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* data = top_stack_ll( &s );
+		printf("%d, %c, %f ---", data -> k, data -> c, data -> g);
+		pop_stack_ll( &s );
+		free( data );
+	}	
+	
+	printf("\n");
+	
+	destroy_stack_ll( &s, 0 );
+}
+
+void stack_testint_ll_p() {
+	stack_ll s;
+	init_stack_ll( &s );
+
+	for ( int i = 0; i < 128; ++i ) 
+		push_stack_ll( &s, i );
+
+	for ( int i = 0; i < 128; ++i ) {
+		int k = top_stack_ll( &s );
+		printf("%d ", k);
+		pop_stack_ll( &s );	
+	}
+	
+	printf("\n");
+	
+	destroy_stack_ll( &s, 0 );
+}
+
+void stack_teststruct_p() {
+	struct tester {
+		int k;
+		char c;
+		double g;
+	};
+
+	stack s;
+	init_stack( &s );
+	
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_stack( &s, x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* data = top_stack( &s );
+		printf("%d, %c, %f ---", data -> k, data -> c, data -> g);
+		free( data );
+		pop_stack( &s );
+	}	
+	
+	printf("\n");
+	
+	destroy_stack( &s, 0 );
+}
+
+void stack_testint_p() {
+	stack s;
+	init_stack( &s );
+
+	for ( int i = 0; i < 128; ++i ) 
+		push_stack( &s, i );
+
+	for ( int i = 0; i < 128; ++i ) {
+		int k = top_stack( &s );
+		printf("%d ", k);
+		pop_stack( &s );		
+	}	
+	
+	printf("\n");
+	
+	destroy_stack( &s, 0 );
+}
+
+
 void stack_teststruct_ll() {
 	struct tester {
 		int k;
@@ -65,19 +162,19 @@ void stack_testint_ll() {
 	
 	while ( t-- ) {	
 		for ( int i = 0; i < 16384; ++i ) 
-			push_stack_ll( &s, &i );
+			push_stack_ll( &s, i );
 	
 		for ( int i = 0; i < 16384; ++i ) 
 			pop_stack_ll( &s );
 			
 		for ( int i = 0; i < 65536; ++i ) 
-			push_stack_ll( &s, &i );	
+			push_stack_ll( &s, i );	
 			
 		for ( int i = 0; i < 32768; ++i ) 
 			pop_stack_ll( &s );	
 			
 		for ( int i = 0; i < 32768; ++i ) 
-			push_stack_ll( &s, &i );	
+			push_stack_ll( &s, i );	
 			
 		for ( int i = 0; i < 65536; ++i ) 
 			pop_stack_ll( &s );		
@@ -126,7 +223,7 @@ void stack_testint() {
 	
 	while ( t-- ) {	
 		for ( int i = 0; i < 16384; ++i ) 
-			push_stack( &s, &i );
+			push_stack( &s, i );
 
 		for ( int i = 0; i < 16384; ++i ) 
 			pop_stack( &s );
@@ -134,33 +231,46 @@ void stack_testint() {
 		//resize_stack(&s, 0);	
 			
 		for ( int i = 0; i < 65536; ++i ) 
-			push_stack( &s, &i );	
+			push_stack( &s, i );	
 			
 		for ( int i = 0; i < 32768; ++i ) 
 			pop_stack( &s );	
 			
 		for ( int i = 0; i < 32768; ++i ) 
-			push_stack( &s, &i );	
+			push_stack( &s, i );	
 			
 		for ( int i = 0; i < 65536; ++i ) 
 			pop_stack( &s );		
 	}
-	
+
 	destroy_stack( &s, 0 );
 }
 
 int main( int argc, char* argv[] ) {
-	assert( argc == 2 );
+	assert( argc == 3 );
 	
 	char* arg = argv[1];
+	int k = atoi( argv[2] );			// 1 if we want to print
 	
 	if ( strcmp(arg, "stackll") == 0 ) {
-		stack_testint_ll();
-		stack_teststruct_ll();
+		if ( !k ) {
+			stack_testint_ll();
+			stack_teststruct_ll();
+		}
+		else {
+			stack_testint_ll_p();
+			stack_teststruct_ll_p();
+		}
 	}
 	else if ( strcmp(arg, "stack") == 0 ) {
-		stack_testint();
-		stack_teststruct();
+		if ( !k ) {
+			stack_testint();
+			stack_teststruct();
+		}
+		else {
+			stack_testint_p();
+			stack_teststruct_p();
+		}
 	}
 	else if ( strcmp(arg, "set") == 0 ) {
 		

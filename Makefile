@@ -16,7 +16,15 @@ HEAD = $(SRCS:.c=.h)
 
 
 # everything
-all: test
+all: test stl timer
+
+# all stl commands
+stl: stl_test.cpp
+	g++ -std=c++11 -g stl_test.cpp -o stl_test
+
+# gets time and memory usage of the function	
+timer: time_val_test.c
+	$(CC) $(CFLAGS) time_val_test.c -o time_val_test
 
 # tester
 test: $(OBJS) $(HEAD) test.c

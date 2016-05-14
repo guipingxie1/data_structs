@@ -16,6 +16,7 @@
 
 #include <string>
 #include <cassert>
+#include <cstdio>
 
 
 using namespace std;
@@ -72,14 +73,63 @@ void stack_testint() {
 }
 
 
+void stack_teststruct_p() {
+	struct tester {
+		int k;
+		char c;
+		double g;
+	};
+
+	stack<tester> s;
+	
+	for ( int i = 0; i < 64; ++i ) {
+		tester x;
+		x.k = i;
+		x.c = i % 26 + 'a';
+		x.g = i * i / 3.0;
+		s.push( x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		tester x = s.top();
+		printf("%d, %c, %f ---", x.k, x.c, x.g);
+		s.pop();
+	}
+	
+	printf("\n");
+}
+
+void stack_testint_p() {
+	stack<int> s;
+
+	for ( int i = 0; i < 128; ++i ) 
+		s.push( i );
+
+	for ( int i = 0; i < 128; ++i ) {
+		int k = s.top();
+		printf("%d ", k);
+		s.pop();
+	}
+	
+	printf("\n");
+}
+
+
 int main( int argc, char* argv[] ) {
-	assert( argc == 2 );
+	assert( argc == 3 );
 	
 	string arg = argv[1];
+	int k = atoi( argv[2] );			// 1 if we want to print
 	
 	if ( arg.compare("stack") == 0 ) {
-		stack_testint();
-		stack_teststruct();
+		if ( !k ) {
+			stack_testint();
+			stack_teststruct();
+		}
+		else {
+			stack_testint_p();
+			stack_teststruct_p();
+		}
 	}
 	else if ( arg.compare("set") == 0 ) {
 		

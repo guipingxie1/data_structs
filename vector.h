@@ -18,6 +18,8 @@
 /**
  * 	The vector struct the user will use
  *	Implemented with an array
+ *	Can only hold up to 131072 elements
+ *	Stay consistant with data pushed into the stack  
  *
  */
 typedef struct vector {
@@ -89,13 +91,23 @@ int get_size_vector( vector* v );
 
 
 /**
- *	Returns the data at the top of the vector
+ *	Returns the data at the front of the vector
  *	Can manipulate the data in place and changes will be reflected in the vector 
  *
  * 	@param s: The vector struct we want to operate with
- * 	@return The data at the top of the vector
+ * 	@return The data at the front of the vector
  */
-void* top_vector( vector* v );
+void* front_vector( vector* v );
+
+
+/**
+ *	Returns the data at the back of the vector
+ *	Can manipulate the data in place and changes will be reflected in the vector 
+ *
+ * 	@param s: The vector struct we want to operate with
+ * 	@return The data at the back of the vector
+ */
+void* back_vector( vector* v );
 
 
 /**
@@ -111,7 +123,9 @@ void push_vector( vector* v, void* data );
 
 /**
  *	Remove the last element (data) pushed into the vector
- *	This does NOT free the data 
+ *	This does NOT free the data if it was initialized in the heap
+ *	In order to free the data, should call back_vector to get the last element
+ *			then free that data and then call pop_vector
  *
  * 	@param s: The vector struct we want to operate with
  */

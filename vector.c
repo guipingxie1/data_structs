@@ -27,7 +27,7 @@ void init_vector( vector* v ) {
 
 
 /*	Destroy the vector --- similar to a destructor in C++  */
-void destroy_vector( vector* s, int free_data ) {
+void destroy_vector( vector* v, int free_data ) {
 	assert( v && "vector is not valid" );
 	
 	if ( free_data ) {
@@ -41,7 +41,7 @@ void destroy_vector( vector* s, int free_data ) {
 
 
 /*	Resizes the vector  */
-void resize_vector( vector* s, int new_size ) {
+void resize_vector( vector* v, int new_size ) {
 	assert( v && "vector is not valid" );
 	assert( (new_size > -1) && "Invalid size, must be non negative" );
 	assert( (new_size < vector_MAX_CAP) && "New size can only be up to 131072" );
@@ -92,15 +92,15 @@ void* back_vector( vector* v ) {
 
 
 /*	Pushes in the data into the vector  */
-void push_back_vector( vector* s, void* data ) {
+void push_vector( vector* v, void* data ) {
 	assert( v && "vector is not valid" );
 	assert( (v -> size < vector_MAX_CAP) && "Too many elements, max of 131072" );
 	assert( (v -> size <= v -> capacity) && "vector management went wrong" );
 	
 	if ( v -> size == v -> capacity ) {
 		if ( v -> capacity == 0 )
-			resize_vector( s, 16 );
-		else resize_vector( s, (v -> capacity) << 1 );
+			resize_vector( v, 16 );
+		else resize_vector( v, (v -> capacity) << 1 );
 	}
 	
 	(v -> array)[v -> size] = data;
@@ -112,7 +112,7 @@ void push_back_vector( vector* s, void* data ) {
 
 
 /*	Remove the last element (data) pushed into the vector  */
-void pop_back_vector( vector* v ) {
+void pop_vector( vector* v ) {
 	assert( v && "vector is not valid" );
 	assert( v -> size && "Cannot pop from empty vector" );
 	
@@ -121,7 +121,7 @@ void pop_back_vector( vector* v ) {
 
 
 /*	Returns the element (data) at the specified index of the vector  */
-void* get_elem_vector( vector* s, int pos ) {
+void* get_elem_vector( vector* v, int pos ) {
 	assert( v && "vector is not valid" );
 	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
 	
