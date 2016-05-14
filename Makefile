@@ -9,12 +9,12 @@ CFLAGS = -g -std=c99
 SRCS = stack_ll.c stack.c queue.c priority_queue.c set.c map.c vector.c deque.c hashtable.c
 
 # objects location
-LOC = object_files/
+LOC = object_files
 
 # all the object files
 # moves the object files to a different folder so directory is not as cluttered
 OBJS_TMP = $(SRCS:.c=.o)
-OBJS = $(patsubst %.o, $(LOC)%.o, $(OBJS_TMP))
+OBJS = $(patsubst %.o, $(LOC)/%.o, $(OBJS_TMP))
 
 # all the dependencies (headers)
 HEAD = $(SRCS:.c=.h)
@@ -37,7 +37,7 @@ test: $(OBJS_TMP) $(HEAD) test.c
 
 # magic
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $(LOC)$@
+	$(CC) $(CFLAGS) -c $< -o $(LOC)/$@
 
 # clean up
 clean: 

@@ -11,7 +11,6 @@
 #include <assert.h>
 #include <stddef.h>				// for NULL definition
 #include <stdlib.h>				// for malloc, free
-//#include <stdio.h> 
 
 #include "stack_ll.h"
 
@@ -53,7 +52,6 @@ void destroy_stack_ll( stack_ll* s, int free_data ) {
 	
 	if ( free_data ) {
 		while ( node != NULL ) {
-			//printf("%p ", node);
 			free( node -> data );
 			copy = node;
 			node = node -> next;
@@ -62,7 +60,6 @@ void destroy_stack_ll( stack_ll* s, int free_data ) {
 	}
 	else {
 		while ( node != NULL ) {
-			//printf("%p ", node);
 			copy = node;
 			node = node -> next;
 			free( copy );

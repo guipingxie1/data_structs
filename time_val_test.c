@@ -7,12 +7,15 @@
  *
  */
 
+#define _GNU_SOURCE
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 
 /**
@@ -121,15 +124,16 @@ void get_valgrind( char* args[] ) {
 
 	wait_helper( memory );
 	
+	/*	Move file pointer back to the beginning  */
 	rewind( valgrind );
 	char* line = NULL;
 	size_t n = 0;
-	while ( getline(&line, &n, ptr) != -1 ) {
+	while ( getline(&line, &n, valgrind) != -1 ) {
 		
 	}
 
 	free( line );
-	fclose( ptr );
+	fclose( valgrind );
 }
 
 
