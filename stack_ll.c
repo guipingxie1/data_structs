@@ -53,6 +53,7 @@ void destroy_stack_ll( stack_ll* s, int free_data ) {
 	if ( free_data ) {
 		while ( node != NULL ) {
 			free( node -> data );
+			node -> data = NULL;
 			copy = node;
 			node = node -> next;
 			free( copy );

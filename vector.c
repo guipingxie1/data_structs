@@ -32,11 +32,14 @@ void destroy_vector( vector* v, int free_data ) {
 	
 	if ( free_data ) {
 		int max = v -> max_size;
-		for ( int i = 0; i < max; ++i ) 
+		for ( int i = 0; i < max; ++i ) {
 			free( (v -> array)[i] );
+			(v -> array)[i] = NULL;
+		}
 	}
 		
 	free( v -> array );
+	v -> array = NULL;
 }
 
 
@@ -129,6 +132,15 @@ void* get_elem_vector( vector* v, int pos ) {
 } 
 
 
+/*	Sets the data at the specified index of the vector  */
+void set_elem_vector( vector* v, int pos, void* data ) {
+	assert( v && "vector is not valid" );
+	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
+	
+	(v -> array)[pos] = data;
+}
+
+
 /*	Deletes the entry at the provided position and shifts everything after it  */
 void delete_at_vector( vector* v, int pos, int free_data ) {
 
@@ -136,7 +148,7 @@ void delete_at_vector( vector* v, int pos, int free_data ) {
 
 
 /*	Inserts the entry at the provided position and shifts everything after it  */
-void insert_at_vector( vector* v, void* data, int pos ) {
+void insert_at_vector( vector* v, int pos, void* data ) {
 
 }
 

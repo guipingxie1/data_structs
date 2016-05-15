@@ -204,6 +204,27 @@ void vector_testint_p() {
 
 	for ( int i = 0; i < 128; ++i ) 
 		printf("%d ", v[i]);
+		
+	for ( int i = 0; i < 128; ++i ) {
+		v[i] *= (i >> 1);
+		printf("%d ", v[i]);	
+	}
+	
+	vector< vector<int> > vv;
+	
+	for ( int i = 0; i < 16; ++i ) {
+		vector<int> k;
+		
+		for ( int j = 0; j < 16; ++j )
+			k.push_back(j);
+			
+		vv.push_back(k);	
+	}
+
+	for ( int i = 0; i < 16; ++i ) {
+		for ( int j = 0; j < 16; ++j )
+			printf("%d ", vv[i][j]);	
+	}
 	
 	printf("\n");
 }

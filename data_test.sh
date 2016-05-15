@@ -68,7 +68,7 @@ then
 	echo ''
 	
 	echo Benchmark of vector --- array implementation
-	
+	#./bench ./test vector vector/vector.txt
 	
 	echo Benchmark of std::vector --- c++ library
 	./bench ./stl_test vector vector/stl_vector.txt
@@ -169,7 +169,7 @@ then
 	rm -r map
 fi
 
-# pqueue set
+# set test
 if [ "$data_struct" == "set" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p set

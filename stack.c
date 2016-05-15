@@ -32,11 +32,14 @@ void destroy_stack( stack* s, int free_data ) {
 	
 	if ( free_data ) {
 		int max = s -> max_size;
-		for ( int i = 0; i < max; ++i ) 
+		for ( int i = 0; i < max; ++i ) {
 			free( (s -> array)[i] );
+			(s -> array)[i] = NULL;
+		}
 	}
 		
 	free( s -> array );
+	s -> array = NULL;
 }
 
 

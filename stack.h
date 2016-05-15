@@ -56,6 +56,7 @@ void init_stack( stack* s );
 /**
  *	Destroy the stack --- similar to a destructor in C++
  *	Do not call any frees on the stack structure yourself 
+ *	However user responsible to free the stack struct if it was malloc'd 
  *
  * 	@param s: The stack struct we want to operate with
  * 	@param free_data: Whether we should free the data or not, 0 - don't free

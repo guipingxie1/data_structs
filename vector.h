@@ -57,6 +57,7 @@ void init_vector( vector* v );
  *	Destroy the vector --- similar to a destructor in C++
  *	Do not call any frees on the vector structure yourself 
  *	Do NOT set free_data to nonzero value if data is on the stack, will cause errors
+ *	However user responsible to free the vector struct if it was malloc'd
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param free_data: Whether we should free the data or not, 0 - don't free
@@ -135,13 +136,25 @@ void pop_vector( vector* v );
 
 /**
  *	Returns the element (data) at the specified index of the vector
- *	vector is 0-indexed therefore the first element is at index 0
+ *	Vector is 0-indexed therefore the first element is at index 0
+ *	Can also manipulate the data directly through this function call
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param pos: The index of the element we want to access (0-indexed)
  * 	@return The data at the specified index
  */
 void* get_elem_vector( vector* v, int pos ); 
+
+
+/**
+ *	Sets the data at the specified index of the vector
+ *	Vector is 0-indexed therefore the first element is at index 0
+ *
+ * 	@param v: The vector struct we want to operate with
+ * 	@param pos: The index of the element we want to set (0-indexed)
+ * 	@param data: The data 
+ */
+void set_elem_vector( vector* v, int pos, void* data ); 
 
 
 /**
@@ -162,10 +175,10 @@ void delete_at_vector( vector* v, int pos, int free_data );
  *	Cannot insert past the end
  *
  * 	@param v: The vector struct we want to operate with
+ * 	@param pos: The index of the element we want to insert at (0-indexed) 
  * 	@param data: The data we want to insert into the vector 
- * 	@param pos: The index of the element we want to insert at (0-indexed)
  */
-void insert_at_vector( vector* v, void* data, int pos ); 
+void insert_at_vector( vector* v, int pos, void* data ); 
 
 
 #endif
