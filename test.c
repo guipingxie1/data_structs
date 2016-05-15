@@ -47,8 +47,7 @@ void stack_teststruct_ll_p() {
 	for ( int i = 0; i < 64; ++i ) {
 		struct tester* data = top_stack_ll( &s );
 		printf("%d, %c, %f ---", data -> k, data -> c, data -> g);
-		pop_stack_ll( &s );
-		free( data );
+		pop_stack_ll( &s, 1 );
 	}	
 	
 	printf("\n");
@@ -66,7 +65,7 @@ void stack_testint_ll_p() {
 	for ( int i = 0; i < 128; ++i ) {
 		int k = top_stack_ll( &s );
 		printf("%d ", k);
-		pop_stack_ll( &s );	
+		pop_stack_ll( &s, 0 );	
 	}
 	
 	printf("\n");
@@ -89,11 +88,8 @@ void stack_teststruct_ll() {
 			push_stack_ll( &s, x );
 		}
 	
-		for ( int i = 0; i < 4096; ++i ) {
-			struct tester* data = top_stack_ll( &s );
-			pop_stack_ll( &s );
-			free( data );
-		}
+		for ( int i = 0; i < 4096; ++i ) 
+			pop_stack_ll( &s, 1 );
 	}
 	
 	destroy_stack_ll( &s, 0 );
@@ -110,19 +106,19 @@ void stack_testint_ll() {
 			push_stack_ll( &s, i );
 	
 		for ( int i = 0; i < 16384; ++i ) 
-			pop_stack_ll( &s );
+			pop_stack_ll( &s, 0 );
 			
-		for ( int i = 0; i < 50000; ++i ) 
+		for ( int i = 0; i < 40000; ++i ) 
 			push_stack_ll( &s, i );	
 			
-		for ( int i = 0; i < 25000; ++i ) 
-			pop_stack_ll( &s );	
+		for ( int i = 0; i < 20000; ++i ) 
+			pop_stack_ll( &s, 0 );	
 			
-		for ( int i = 0; i < 25000; ++i ) 
+		for ( int i = 0; i < 20000; ++i ) 
 			push_stack_ll( &s, i );	
 			
-		for ( int i = 0; i < 50000; ++i ) 
-			pop_stack_ll( &s );		
+		for ( int i = 0; i < 40000; ++i ) 
+			pop_stack_ll( &s, 0 );		
 	}
 	
 	destroy_stack_ll( &s, 0 );
@@ -147,8 +143,7 @@ void stack_teststruct_p() {
 	for ( int i = 0; i < 64; ++i ) {
 		struct tester* data = top_stack( &s );
 		printf("%d, %c, %f ---", data -> k, data -> c, data -> g);
-		free( data );
-		pop_stack( &s );
+		pop_stack( &s, 1 );
 	}	
 	
 	printf("\n");
@@ -166,7 +161,7 @@ void stack_testint_p() {
 	for ( int i = 0; i < 128; ++i ) {
 		int k = top_stack( &s );
 		printf("%d ", k);
-		pop_stack( &s );		
+		pop_stack( &s, 0 );		
 	}	
 	
 	printf("\n");
@@ -189,11 +184,8 @@ void stack_teststruct() {
 			push_stack( &s, x );
 		}
 	
-		for ( int i = 0; i < 4096; ++i ) {
-			struct tester* data = top_stack( &s );
-			pop_stack( &s );
-			free( data );
-		}
+		for ( int i = 0; i < 4096; ++i ) 
+			pop_stack( &s, 1 );
 	}
 	
 	destroy_stack( &s, 0 );
@@ -211,21 +203,21 @@ void stack_testint() {
 			push_stack( &s, i );
 
 		for ( int i = 0; i < 16384; ++i ) 
-			pop_stack( &s );
+			pop_stack( &s, 0 );
 			
 		//resize_stack(&s, 0);	
 			
-		for ( int i = 0; i < 50000; ++i ) 
+		for ( int i = 0; i < 40000; ++i ) 
 			push_stack( &s, i );	
 			
-		for ( int i = 0; i < 25000; ++i ) 
-			pop_stack( &s );	
+		for ( int i = 0; i < 20000; ++i ) 
+			pop_stack( &s, 0 );	
 			
-		for ( int i = 0; i < 25000; ++i ) 
+		for ( int i = 0; i < 20000; ++i ) 
 			push_stack( &s, i );	
 			
-		for ( int i = 0; i < 50000; ++i ) 
-			pop_stack( &s );		
+		for ( int i = 0; i < 40000; ++i ) 
+			pop_stack( &s, 0 );		
 	}
 
 	destroy_stack( &s, 0 );
@@ -257,6 +249,20 @@ void vector_teststruct() {
 	}
 	
 	destroy_vector( &v, 1 );
+	
+	vector vv;
+	init_vector( &vv );
+	
+	for ( int i = 0; i < 512; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_vector( &vv, x );
+	}
+	
+	resize_vector( &vv, 0, 1 );	
+	destroy_vector( &vv, 0 );
 }
 
 void vector_testint() {
@@ -308,7 +314,6 @@ void vector_testint() {
 	
 	destroy_vector( &vv, 1 );	
 }
-
 
 void vector_teststruct_p() {
 	vector v;

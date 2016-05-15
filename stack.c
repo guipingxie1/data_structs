@@ -44,12 +44,20 @@ void destroy_stack( stack* s, int free_data ) {
 
 
 /*	Resizes the stack  */
-void resize_stack( stack* s, int new_size ) {
+void resize_stack( stack* s, int new_size, int free_data ) {
 	assert( s && "Stack is not valid" );
 	assert( (new_size > -1) && "Invalid size, must be non negative" );
 	assert( (new_size < STACK_MAX_CAP) && "New size can only be up to 131072" );
 	
 	if ( s -> size > new_size ) {
+		if ( free_data ) {
+			int size = s -> size;
+			for ( int i = new_size; i < size; ++i ) {
+				free( (s -> array)[i] );
+				(s -> array)[i] = NULL;
+			}
+		}
+		
 		s -> size = new_size;
 		s -> max_size = new_size;
 	}
@@ -93,8 +101,8 @@ void push_stack( stack* s, void* data ) {
 	
 	if ( s -> size == s -> capacity ) {
 		if ( s -> capacity == 0 )
-			resize_stack( s, 16 );
-		else resize_stack( s, (s -> capacity) << 1 );
+			resize_stack( s, 16, 0 );
+		else resize_stack( s, (s -> capacity) << 1, 0 );
 	}
 	
 	(s -> array)[s -> size] = data;
@@ -106,9 +114,14 @@ void push_stack( stack* s, void* data ) {
 
 
 /*	Remove the last element (data) pushed into the stack  */
-void pop_stack( stack* s ) {
+void pop_stack( stack* s, int free_data ) {
 	assert( s && "Stack is not valid" );
 	assert( s -> size && "Cannot pop from empty stack" );
+	
+	if ( free_data ) {
+		free( (s -> array)[s -> size - 1]	);
+		(s -> array)[s -> size - 1]	= NULL;
+	}
 	
 	s -> size -= 1;
 }

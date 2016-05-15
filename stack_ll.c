@@ -146,9 +146,14 @@ void push_stack_ll( stack_ll* s, void* data ) {
  *	Does not free the last list_node until we destroy
  *	This is to increase performance
  */
-void pop_stack_ll( stack_ll* s ) {
+void pop_stack_ll( stack_ll* s, int free_data ) {
 	assert( s && "Stack is not valid" );
 	assert( s -> tail && "Cannot pop from empty stack" );
+	
+	if ( free_data ) {
+		free( s -> tail -> data );
+		s -> tail -> data = NULL;
+	}
 	
 	s -> tail = s -> tail -> prev;
 	s -> size -= 1;

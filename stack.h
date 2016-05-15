@@ -67,11 +67,14 @@ void destroy_stack( stack* s, int free_data );
 
 /**
  *	Resizes the stack (call if the max size is known before hand)
+ *	Can also free all the data if the new_size is smaller than the original size
+ *	To do this set the free_data parameter to a non-zero value 
  *
  * 	@param s: The stack struct we want to operate with
  * 	@param new_size: The new size we want our stack to be
+ * 	@param free_data: Whether we want to free the data if new_size if smaller 
  */
-void resize_stack( stack* s, int new_size );
+void resize_stack( stack* s, int new_size, int free_data );
 
 
 /**
@@ -115,13 +118,12 @@ void push_stack( stack* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
- *	This does NOT free the data if it was initialized in the heap
- *	In order to free the data, should call top_stack to get the top element
- *			then free that data and then call pop_stack
+ *	Will free the data if the free_data param is non zero
  *
  * 	@param s: The stack struct we want to operate with
+ * 	@param free_data: Whether we want to free the data (non zero value - free) 
  */
-void pop_stack( stack* s );
+void pop_stack( stack* s, int free_data );
 
 
 /**

@@ -67,11 +67,14 @@ void destroy_vector( vector* v, int free_data );
 
 /**
  *	Resizes the vector (call if the max size is known before hand)
+ *	Can also free all the data if the new_size is smaller than the original size
+ *	To do this set the free_data parameter to a non-zero value
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param new_size: The new size we want our vector to be
+ * 	@param free_data: Whether we want to free the data if new_size if smaller
  */
-void resize_vector( vector* v, int new_size );
+void resize_vector( vector* v, int new_size, int free_data );
 
 
 /**

@@ -62,16 +62,16 @@ void stack_testint() {
 		for ( int i = 0; i < 16384; ++i ) 
 			s.pop();
 			
-		for ( int i = 0; i < 50000; ++i ) 
+		for ( int i = 0; i < 40000; ++i ) 
 			s.push( i );
 			
-		for ( int i = 0; i < 25000; ++i ) 
+		for ( int i = 0; i < 20000; ++i ) 
 			s.pop();
 			
-		for ( int i = 0; i < 25000; ++i ) 
+		for ( int i = 0; i < 20000; ++i ) 
 			s.push( i );
 			
-		for ( int i = 0; i < 50000; ++i ) 
+		for ( int i = 0; i < 40000; ++i ) 
 			s.pop();	
 	}
 }
@@ -133,6 +133,18 @@ void vector_teststruct() {
 		for ( int i = 0; i < 4096; ++i ) 
 			v[i].k = i << 1;
 	}
+	
+	vector<tester> vv;
+	
+	for ( int i = 0; i < 512; ++i ) {
+		tester x;
+		x.k = i;
+		x.c = i % 26 + 'a';
+		x.g = i * i / 3.0;
+		v.push_back( x );
+	}
+	
+	v.resize(0);
 }
 
 void vector_testint() {
@@ -162,7 +174,7 @@ void vector_testint() {
 			v.erase(v.begin());
 			
 		v.clear();			
-	}
+	}	
 	
 	vector< vector<int> > vv;
 	
@@ -209,6 +221,8 @@ void vector_testint_p() {
 		v[i] *= (i >> 1);
 		printf("%d ", v[i]);	
 	}
+	
+	printf("\n");
 	
 	vector< vector<int> > vv;
 	

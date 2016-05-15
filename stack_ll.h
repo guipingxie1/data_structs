@@ -110,13 +110,12 @@ void push_stack_ll( stack_ll* s, void* data );
 
 /**
  *	Remove the last element (data) pushed into the stack
- *	This does NOT free the data if it was initialized in the heap
- *	In order to free the data, should call top_stack_ll to get the top element
- *			then free that data and then call pop_stack_ll 
+ *	Will free the data if the free_data param is non zero
  *
  * 	@param s: The stack struct we want to operate with
+ * 	@param free_data: Whether we want to free the data (non zero value - free)  
  */
-void pop_stack_ll( stack_ll* s );
+void pop_stack_ll( stack_ll* s, int free_data );
 
 
 /**

@@ -17,7 +17,7 @@
 
 /*	Initialize the vector --- similar to a constructor in C++  */
 void init_vector( vector* v ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	
 	v -> array = malloc( 16 * sizeof(void*) );
 	v -> size = -1;
@@ -28,7 +28,7 @@ void init_vector( vector* v ) {
 
 /*	Destroy the vector --- similar to a destructor in C++  */
 void destroy_vector( vector* v, int free_data ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	
 	if ( free_data ) {
 		int max = v -> max_size;
@@ -44,14 +44,22 @@ void destroy_vector( vector* v, int free_data ) {
 
 
 /*	Resizes the vector  */
-void resize_vector( vector* v, int new_size ) {
-	assert( v && "vector is not valid" );
+void resize_vector( vector* v, int new_size, int free_data ) {
+	assert( v && "Vector is not valid" );
 	assert( (new_size > -1) && "Invalid size, must be non negative" );
 	assert( (new_size < VECT_MAX_CAP) && "New size can only be up to 131072" );
 	
 	if ( v -> size > new_size ) {
-		v -> size = new_size;
-		v -> max_size = new_size;
+		if ( free_data ) {
+			int size = v -> size;
+			for ( int i = new_size; i <= size; ++i ) {
+				free( (v -> array)[i] );
+				(v -> array)[i] = NULL;
+			}
+		}
+		
+		v -> size = new_size - 1;
+		v -> max_size = new_size - 1;
 	}
 		
 	v -> capacity = new_size;	
@@ -62,7 +70,7 @@ void resize_vector( vector* v, int new_size ) {
 
 /*	Checks if the vector is empty or not  */
 int is_empty_vector( vector* v ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	
 	return ( v -> size == -1 );
 }
@@ -70,7 +78,7 @@ int is_empty_vector( vector* v ) {
 
 /*	Returns the size of the vector  */
 int get_size_vector( vector* v ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 
 	/*	Need to add one because it is 0-indexed  */
 	return 1 + v -> size;			
@@ -79,8 +87,8 @@ int get_size_vector( vector* v ) {
 
 /*	Returns the data at the front of the vector  */
 void* front_vector( vector* v ) {
-	assert( v && "vector is not valid" );
-	assert( (v -> size > -1) && "vector is empty" );
+	assert( v && "Vector is not valid" );
+	assert( (v -> size > -1) && "Vector is empty" );
 	
 	return (v -> array)[0];
 }
@@ -88,8 +96,8 @@ void* front_vector( vector* v ) {
 
 /*	Returns the data at the back of the vector  */
 void* back_vector( vector* v ) {
-	assert( v && "vector is not valid" );
-	assert( (v -> size > -1) && "vector is empty" );
+	assert( v && "Vector is not valid" );
+	assert( (v -> size > -1) && "Vector is empty" );
 	
 	return (v -> array)[v -> size];
 }
@@ -97,14 +105,14 @@ void* back_vector( vector* v ) {
 
 /*	Pushes in the data into the vector  */
 void push_vector( vector* v, void* data ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	assert( (1 + v -> size < VECT_MAX_CAP) && "Too many elements, max of 131072" );
-	assert( (v -> size < v -> capacity) && "vector management went wrong" );
+	assert( (v -> size < v -> capacity) && "Vector management went wrong" );
 	
 	if ( 1 + v -> size == v -> capacity ) {
 		if ( v -> capacity == 0 )
-			resize_vector( v, 16 );
-		else resize_vector( v, (v -> capacity) << 1 );
+			resize_vector( v, 16, 0 );
+		else resize_vector( v, (v -> capacity) << 1, 0 );
 	}
 	
 	v -> size += 1;
@@ -117,7 +125,7 @@ void push_vector( vector* v, void* data ) {
 
 /*	Remove the last element (data) pushed into the vector  */
 void pop_vector( vector* v ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	assert( (v -> size > -1) && "Cannot pop from empty vector" );
 	
 	v -> size -= 1;
@@ -126,7 +134,7 @@ void pop_vector( vector* v ) {
 
 /*	Returns the element (data) at the specified index of the vector  */
 void* get_elem_vector( vector* v, int pos ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
 	
 	return (v -> array)[pos];
@@ -135,7 +143,7 @@ void* get_elem_vector( vector* v, int pos ) {
 
 /*	Sets the data at the specified index of the vector  */
 void set_elem_vector( vector* v, int pos, void* data ) {
-	assert( v && "vector is not valid" );
+	assert( v && "Vector is not valid" );
 	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
 	
 	(v -> array)[pos] = data;
