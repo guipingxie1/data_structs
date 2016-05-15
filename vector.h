@@ -19,7 +19,8 @@
  * 	The vector struct the user will use
  *	Implemented with an array
  *	Can only hold up to 131072 elements
- *	Stay consistant with data pushed into the stack  
+ *	Stay consistant with data pushed into the vector  
+ *	Please do not modify the struct directly
  *
  */
 typedef struct vector {
@@ -42,12 +43,12 @@ typedef struct vector {
  *	Initialize the vector --- similar to a constructor in C++
  *	Can be called with either :
  *			vector* v = malloc( sizeof(vector) );
- *			init_vector( s ); 
+ *			init_vector( v ); 
  *	OR
- *			vector s;
- *			init_vector( &s ); 		
+ *			vector v;
+ *			init_vector( &v ); 		
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  */
 void init_vector( vector* v );
 
@@ -55,10 +56,10 @@ void init_vector( vector* v );
 /**
  *	Destroy the vector --- similar to a destructor in C++
  *	Do not call any frees on the vector structure yourself 
+ *	Do NOT set free_data to nonzero value if data is on the stack, will cause errors
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@param free_data: Whether we should free the data or not, 0 - don't free
- *											Do NOT free when data is on the vector 
  */
 void destroy_vector( vector* v, int free_data );
 
@@ -66,7 +67,7 @@ void destroy_vector( vector* v, int free_data );
 /**
  *	Resizes the vector (call if the max size is known before hand)
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@param new_size: The new size we want our vector to be
  */
 void resize_vector( vector* v, int new_size );
@@ -75,7 +76,7 @@ void resize_vector( vector* v, int new_size );
 /**
  *	Checks if the vector is empty or not
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@return 1 (true) if the vector is empty, 0 (false) otherwise
  */
 int is_empty_vector( vector* v );
@@ -84,7 +85,7 @@ int is_empty_vector( vector* v );
 /**
  *	Returns the size of the vector
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@return The size of the vector
  */
 int get_size_vector( vector* v );
@@ -94,7 +95,7 @@ int get_size_vector( vector* v );
  *	Returns the data at the front of the vector
  *	Can manipulate the data in place and changes will be reflected in the vector 
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@return The data at the front of the vector
  */
 void* front_vector( vector* v );
@@ -104,7 +105,7 @@ void* front_vector( vector* v );
  *	Returns the data at the back of the vector
  *	Can manipulate the data in place and changes will be reflected in the vector 
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@return The data at the back of the vector
  */
 void* back_vector( vector* v );
@@ -115,7 +116,7 @@ void* back_vector( vector* v );
  *	Does NOT create a copy of the data passed in
  *	Therefore the data should remain in scope for as long as the vectors lifetime 
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  * 	@param data: The data we want to push into the vector
  */
 void push_vector( vector* v, void* data );  
@@ -127,7 +128,7 @@ void push_vector( vector* v, void* data );
  *	In order to free the data, should call back_vector to get the last element
  *			then free that data and then call pop_vector
  *
- * 	@param s: The vector struct we want to operate with
+ * 	@param v: The vector struct we want to operate with
  */
 void pop_vector( vector* v );
 
@@ -136,11 +137,35 @@ void pop_vector( vector* v );
  *	Returns the element (data) at the specified index of the vector
  *	vector is 0-indexed therefore the first element is at index 0
  *
- * 	@param s: The vector struct we want to operate with
- * 	@param pos: The index we of the element we want to access (0-indexed)
+ * 	@param v: The vector struct we want to operate with
+ * 	@param pos: The index of the element we want to access (0-indexed)
  * 	@return The data at the specified index
  */
 void* get_elem_vector( vector* v, int pos ); 
+
+
+/**
+ *	Deletes the entry at the provided position and shifts everything after it
+ *	Will free the data if the free_data parameter is non zero
+ *	Do NOT set free_data to nonzero value if data is on the stack, will cause errors
+ *
+ * 	@param v: The vector struct we want to operate with
+ * 	@param pos: The index of the element we want to delete (0-indexed)
+ * 	@param free_data: Whether we want to free the data at the position
+ */
+void delete_at_vector( vector* v, int pos, int free_data ); 
+
+
+/**
+ *	Inserts the entry at the provided position and shifts everything after it
+ *	Can only insert up to the last element (same as push_vector)
+ *	Cannot insert past the end
+ *
+ * 	@param v: The vector struct we want to operate with
+ * 	@param data: The data we want to insert into the vector 
+ * 	@param pos: The index of the element we want to insert at (0-indexed)
+ */
+void insert_at_vector( vector* v, void* data, int pos ); 
 
 
 #endif

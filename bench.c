@@ -9,17 +9,31 @@
 
 #define _GNU_SOURCE
 #include <time.h>
+#include <signal.h>
 #include <unistd.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/resource.h>
+#include <sys/prctl.h>
 #include <fcntl.h>
+
+
+
+/**
+ *	Signal handler for timeout
+ *	Will exit the program after 10 seconds (real time)
+ *
+ *	@param signal: The signal we want to capture
+ */
+static void timeout(int signal) {
+	printf( "  Time Limit Exceeded (10 seconds)\n" );
+	exit( 1 );
+}
 
 
 /**
@@ -43,10 +57,9 @@ void wait_helper( pid_t pid ) {
 void redirect_close_fd( FILE* ptr ) {
 	int fd = fileno( ptr );
 		
-	// make stdout go to file	
+	/*	Make stderr go to file  */	
 	assert( (dup2(fd, 2) != -1) && "Could not redirect stderr to our file" );
-	
-	// fd no longer needed - the dup'ed handles are sufficient
+
 	assert( !close(fd) && "Could not close file descriptor" );
 }
 
@@ -91,16 +104,16 @@ void benchmark( pid_t pid ) {
 	mem_begin = usage.ru_maxrss;
 	
 	/*	Get the real (wall) clock time  */
-	clock_gettime(CLOCK_MONOTONIC, &r_begin);
+	assert( (clock_gettime(CLOCK_MONOTONIC, &r_begin) != -1) && "Cannot time" );
 
 	wait_helper( pid );
 	
-	/*	Get the child usage details (after waiting for it) */
+	/*	Get the child usage details (after waiting for it)  */
 	assert( (getrusage( RUSAGE_CHILDREN, &usage ) != -1) && "Cannot benchmark" );
 	u_end = usage.ru_utime;
 	s_end = usage.ru_stime;
 	
-	clock_gettime(CLOCK_MONOTONIC, &r_end); 	
+	assert( (clock_gettime(CLOCK_MONOTONIC, &r_end) != -1) && "Cannot time" );
 	
 	/*	Seconds  */
 	double r_diff = r_end.tv_sec - r_begin.tv_sec;
@@ -184,6 +197,9 @@ void get_valgrind( char* args[] ) {
 		child_helper( valgrind, valgrind_args );
 	}
 	
+	/*	Kill child if parent terminates  */
+	prctl( PR_SET_PDEATHSIG, SIGHUP );		
+	
 	/*	Call time function in parent  */
 	time_function( args );
 
@@ -196,7 +212,7 @@ void get_valgrind( char* args[] ) {
 	char* mem;
 	while ( getline(&line, &n, valgrind) != -1 ) {
 		if ( (mem = strstr(line, "total heap usage:")) != NULL ) {
-			printf( "  Memory Usage (valgrind):\n" );
+			printf( "  Total Memory Usage (valgrind):\n" );
 			printf( "    %s\n", mem + 18 );
 			break;
 		}
@@ -247,7 +263,24 @@ void get_file( char* args[] ) {
 int main( int argc, char* argv[] ) {
 	assert( argc == 4 );
 	
+	/*	Kill child if parent terminates  */
+	prctl( PR_SET_PDEATHSIG, SIGHUP );	
+
+	/*  Structs needed to capture signal  */
+	struct sigaction sa;
+	sa.sa_handler = timeout;
+	
+	/*	Set sigaction signal handler  */
+	assert( (sigaction(SIGALRM, &sa, NULL) != -1) && "Cannot set signal handler" );
+	
+	/**
+	 *	Start a timer that expires after 10 seconds --- sends SIGALRM  
+	 *	Will use this to handle long running programs
+	 */
+	alarm( 10 );			
+	
 	get_valgrind( argv );
 	get_file( argv );	
+	
 	return 0;
 }

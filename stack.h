@@ -20,6 +20,7 @@
  *	Implemented with an array
  *	Can only hold up to 131072 elements
  *	Stay consistant with data pushed into the stack  
+ *	Please do not modify the struct directly
  *
  */
 typedef struct stack {

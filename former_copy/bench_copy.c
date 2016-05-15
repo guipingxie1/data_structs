@@ -218,6 +218,21 @@ void get_file( char* args[] ) {
 int main( int argc, char* argv[] ) {
 	assert( argc == 4 );
 	
+	/**
+	 *	Got online: 
+	 *	http://stackoverflow.com/questions/28896388/implementing-execution-timeout-with-c-c
+	 * 
+	 *  Start a timer that expires after 10 seconds  
+	 */
+/*	 
+	struct itimerval timer;
+	timer.it_value.tv_sec = 10;
+	timer.it_value.tv_usec = 500000;
+	timer.it_interval.tv_sec = 0;
+	timer.it_interval.tv_usec = 0;
+	setitimer( ITIMER_VIRTUAL, &timer, 0 );
+*/
+	
 	get_valgrind( argv );
 	get_file( argv );
 	

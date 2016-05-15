@@ -127,3 +127,16 @@ void* get_elem_vector( vector* v, int pos ) {
 	
 	return (v -> array)[pos];
 } 
+
+
+/*	Deletes the entry at the provided position and shifts everything after it  */
+void delete_at_vector( vector* v, int pos, int free_data ) {
+
+}
+
+
+/*	Inserts the entry at the provided position and shifts everything after it  */
+void insert_at_vector( vector* v, void* data, int pos ) {
+
+}
+
