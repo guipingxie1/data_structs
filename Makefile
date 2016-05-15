@@ -4,7 +4,7 @@
 #
 
 CC = gcc
-CFLAGS = -g -std=c99
+CFLAGS = -g -std=c99 -w
 
 # all the source files
 SRCS = stack_ll.c stack.c queue.c priority_queue.c set.c map.c vector.c deque.c hashtable.c

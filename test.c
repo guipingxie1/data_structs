@@ -22,14 +22,17 @@
 #include "map.h"
 #include "hashtable.h" 
 
+struct tester {
+	int k;
+	char c;
+	double g;
+};
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
 
 void stack_teststruct_ll_p() {
-	struct tester {
-		int k;
-		char c;
-		double g;
-	};
-
 	stack_ll s;
 	init_stack_ll( &s );
 
@@ -71,13 +74,65 @@ void stack_testint_ll_p() {
 	destroy_stack_ll( &s, 0 );
 }
 
-void stack_teststruct_p() {
-	struct tester {
-		int k;
-		char c;
-		double g;
-	};
+void stack_teststruct_ll() {
+	stack_ll s;
+	init_stack_ll( &s );
 
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 4096; ++i ) {
+			struct tester* x = malloc( sizeof(struct tester) );
+			x -> k = i;
+			x -> c = i % 26 + 'a';
+			x -> g = i * i / 3.0;
+			push_stack_ll( &s, x );
+		}
+	
+		for ( int i = 0; i < 4096; ++i ) {
+			struct tester* data = top_stack_ll( &s );
+			pop_stack_ll( &s );
+			free( data );
+		}
+	}
+	
+	destroy_stack_ll( &s, 0 );
+}
+
+void stack_testint_ll() {
+	stack_ll s;
+	init_stack_ll( &s );
+
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 16384; ++i ) 
+			push_stack_ll( &s, i );
+	
+		for ( int i = 0; i < 16384; ++i ) 
+			pop_stack_ll( &s );
+			
+		for ( int i = 0; i < 50000; ++i ) 
+			push_stack_ll( &s, i );	
+			
+		for ( int i = 0; i < 25000; ++i ) 
+			pop_stack_ll( &s );	
+			
+		for ( int i = 0; i < 25000; ++i ) 
+			push_stack_ll( &s, i );	
+			
+		for ( int i = 0; i < 50000; ++i ) 
+			pop_stack_ll( &s );		
+	}
+	
+	destroy_stack_ll( &s, 0 );
+}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
+void stack_teststruct_p() {
 	stack s;
 	init_stack( &s );
 	
@@ -119,84 +174,14 @@ void stack_testint_p() {
 	destroy_stack( &s, 0 );
 }
 
-
-void stack_teststruct_ll() {
-	struct tester {
-		int k;
-		char c;
-		double g;
-	};
-
-	stack_ll s;
-	init_stack_ll( &s );
-
-	int t = 5;
-	
-	while ( t-- ) {	
-		for ( int i = 0; i < 16384; ++i ) {
-			struct tester* x = malloc( sizeof(struct tester) );
-			x -> k = i;
-			x -> c = i % 26 + 'a';
-			x -> g = i * i / 3.0;
-			push_stack_ll( &s, x );
-		}
-	
-		for ( int i = 0; i < 16384; ++i ) {
-			struct tester* data = top_stack_ll( &s );
-			//printf("%d %c %f --- ", data -> k, data -> c, data -> g);
-			pop_stack_ll( &s );
-			free( data );
-		}
-		
-		//printf("\n");
-	}
-	
-	destroy_stack_ll( &s, 0 );
-}
-
-void stack_testint_ll() {
-	stack_ll s;
-	init_stack_ll( &s );
-
-	int t = 5;
-	
-	while ( t-- ) {	
-		for ( int i = 0; i < 16384; ++i ) 
-			push_stack_ll( &s, i );
-	
-		for ( int i = 0; i < 16384; ++i ) 
-			pop_stack_ll( &s );
-			
-		for ( int i = 0; i < 65536; ++i ) 
-			push_stack_ll( &s, i );	
-			
-		for ( int i = 0; i < 32768; ++i ) 
-			pop_stack_ll( &s );	
-			
-		for ( int i = 0; i < 32768; ++i ) 
-			push_stack_ll( &s, i );	
-			
-		for ( int i = 0; i < 65536; ++i ) 
-			pop_stack_ll( &s );		
-	}
-	
-	destroy_stack_ll( &s, 0 );
-}
-
 void stack_teststruct() {
-	struct tester {
-		int k;
-		char c;
-		double g;
-	};
-
 	stack s;
 	init_stack( &s );
 
 	int t = 5;
 	
 	while ( t-- ) {	
-		for ( int i = 0; i < 16384; ++i ) {
+		for ( int i = 0; i < 4096; ++i ) {
 			struct tester* x = malloc( sizeof(struct tester) );
 			x -> k = i;
 			x -> c = i % 26 + 'a';
@@ -204,7 +189,7 @@ void stack_teststruct() {
 			push_stack( &s, x );
 		}
 	
-		for ( int i = 0; i < 16384; ++i ) {
+		for ( int i = 0; i < 4096; ++i ) {
 			struct tester* data = top_stack( &s );
 			pop_stack( &s );
 			free( data );
@@ -230,21 +215,25 @@ void stack_testint() {
 			
 		//resize_stack(&s, 0);	
 			
-		for ( int i = 0; i < 65536; ++i ) 
+		for ( int i = 0; i < 50000; ++i ) 
 			push_stack( &s, i );	
 			
-		for ( int i = 0; i < 32768; ++i ) 
+		for ( int i = 0; i < 25000; ++i ) 
 			pop_stack( &s );	
 			
-		for ( int i = 0; i < 32768; ++i ) 
+		for ( int i = 0; i < 25000; ++i ) 
 			push_stack( &s, i );	
 			
-		for ( int i = 0; i < 65536; ++i ) 
+		for ( int i = 0; i < 50000; ++i ) 
 			pop_stack( &s );		
 	}
 
 	destroy_stack( &s, 0 );
 }
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
 
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
