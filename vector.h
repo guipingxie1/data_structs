@@ -12,7 +12,7 @@
 #define VECTOR_H
 
 /*	Vector cannot be bigger than 131072  */	
-#define vector_MAX_CAP 131073
+#define VECT_MAX_CAP 131073
 
 
 /**

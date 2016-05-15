@@ -117,7 +117,7 @@ void pop_stack( stack* s ) {
 /*	Returns the element (data) at the specified index of the stack  */
 void* get_elem_stack( stack* s, int pos ) {
 	assert( s && "Stack is not valid" );
-	assert( (pos > -1 && pos <= s -> size) && "Invalid index" );
+	assert( (pos > -1 && pos < s -> size) && "Invalid index" );
 	
 	return (s -> array)[pos];
 } 
