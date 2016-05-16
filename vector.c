@@ -52,6 +52,7 @@ void resize_vector( vector* v, int new_size, int free_data ) {
 	if ( v -> size > new_size ) {
 		if ( free_data ) {
 			int size = v -> size;
+			
 			for ( int i = new_size; i <= size; ++i ) {
 				free( (v -> array)[i] );
 				(v -> array)[i] = NULL;
@@ -124,9 +125,14 @@ void push_vector( vector* v, void* data ) {
 
 
 /*	Remove the last element (data) pushed into the vector  */
-void pop_vector( vector* v ) {
+void pop_vector( vector* v, int free_data ) {
 	assert( v && "Vector is not valid" );
 	assert( (v -> size > -1) && "Cannot pop from empty vector" );
+	
+	if ( free_data ) {
+		free( (v -> array)[v -> size] );
+		(v -> array)[v -> size] = NULL;
+	}
 	
 	v -> size -= 1;
 }
@@ -142,9 +148,12 @@ void* get_elem_vector( vector* v, int pos ) {
 
 
 /*	Sets the data at the specified index of the vector  */
-void set_elem_vector( vector* v, int pos, void* data ) {
+void set_elem_vector( vector* v, int pos, void* data, int free_data ) {
 	assert( v && "Vector is not valid" );
 	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
+	
+	if ( free_data ) 
+		free( (v -> array)[pos] );
 	
 	(v -> array)[pos] = data;
 }
@@ -152,12 +161,40 @@ void set_elem_vector( vector* v, int pos, void* data ) {
 
 /*	Deletes the entry at the provided position and shifts everything after it  */
 void delete_at_vector( vector* v, int pos, int free_data ) {
-
+	assert( v && "Vector is not valid" );
+	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
+	
+	if ( free_data ) {
+		free( (v -> array)[pos] );
+		(v -> array)[pos] = NULL;
+	}	
+	
+	/*	Shifting everything backwards  */
+	int size = v -> size;
+	for ( int i = pos + 1; i <= size; ++i )
+		(v -> array)[i - 1] = (v -> array)[i];
+		
+	v -> size -= 1;	
 }
 
 
 /*	Inserts the entry at the provided position and shifts everything after it  */
 void insert_at_vector( vector* v, int pos, void* data ) {
+	assert( v && "Vector is not valid" );
+	assert( (pos > -1 && pos <= v -> size) && "Invalid index" );
 
+	if ( 1 + v -> size == v -> capacity ) {
+		if ( v -> capacity == 0 )
+			resize_vector( v, 16, 0 );
+		else resize_vector( v, (v -> capacity) << 1, 0 );
+	}
+	
+	/*	Shifting everything forwards  */
+	int size = v -> size;
+	for ( int i = size; i >= pos; --i )
+		(v -> array)[i + 1] = (v -> array)[i];
+	
+	(v -> array)[pos] = data;	
+	v -> size += 1;	
 }
 

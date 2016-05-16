@@ -68,7 +68,7 @@ then
 	echo ''
 	
 	echo Benchmark of vector --- array implementation
-	#./bench ./test vector vector/vector.txt
+	./bench ./test vector vector/vector.txt
 	
 	echo Benchmark of std::vector --- c++ library
 	./bench ./stl_test vector vector/stl_vector.txt

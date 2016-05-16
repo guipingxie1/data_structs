@@ -69,6 +69,10 @@ void destroy_vector( vector* v, int free_data );
  *	Resizes the vector (call if the max size is known before hand)
  *	Can also free all the data if the new_size is smaller than the original size
  *	To do this set the free_data parameter to a non-zero value
+ *	Only deletes data up to the current size (get_size_vector()), everything else
+ *			that was put onto the vector and removed will not be freed 
+ *
+ *	Resizing to new_size of 0 is equivalent to clearing the whole vector
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param new_size: The new size we want our vector to be
@@ -128,13 +132,12 @@ void push_vector( vector* v, void* data );
 
 /**
  *	Remove the last element (data) pushed into the vector
- *	This does NOT free the data if it was initialized in the heap
- *	In order to free the data, should call back_vector to get the last element
- *			then free that data and then call pop_vector
+ *	Will free the data if the free_data param is non zero
  *
  * 	@param v: The vector struct we want to operate with
+ * 	@param free_data: Whether we want to free the data (non zero value - free)  
  */
-void pop_vector( vector* v );
+void pop_vector( vector* v, int free_data );
 
 
 /**
@@ -156,14 +159,17 @@ void* get_elem_vector( vector* v, int pos );
  * 	@param v: The vector struct we want to operate with
  * 	@param pos: The index of the element we want to set (0-indexed)
  * 	@param data: The data 
+ * 	@param free_data: Whether we want to free the data at the position 
  */
-void set_elem_vector( vector* v, int pos, void* data ); 
+void set_elem_vector( vector* v, int pos, void* data, int free_data ); 
 
 
 /**
  *	Deletes the entry at the provided position and shifts everything after it
  *	Will free the data if the free_data parameter is non zero
  *	Do NOT set free_data to nonzero value if data is on the stack, will cause errors
+ *
+ *	NOTE: VERY SLOW
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param pos: The index of the element we want to delete (0-indexed)
@@ -176,6 +182,8 @@ void delete_at_vector( vector* v, int pos, int free_data );
  *	Inserts the entry at the provided position and shifts everything after it
  *	Can only insert up to the last element (same as push_vector)
  *	Cannot insert past the end
+ *
+ *	NOTE: VERY SLOW
  *
  * 	@param v: The vector struct we want to operate with
  * 	@param pos: The index of the element we want to insert at (0-indexed) 

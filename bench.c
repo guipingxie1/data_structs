@@ -31,7 +31,7 @@
  *	@param signal: The signal we want to capture
  */
 static void timeout(int signal) {
-	printf( "  Time Limit Exceeded (10 seconds)\n" );
+	printf( "  Time Limit Exceeded (10 seconds)\n\n" );
 	exit( 1 );
 }
 

@@ -119,7 +119,7 @@ void stack_testint_p() {
 void vector_teststruct() {
 	vector<tester> v;
 
-	int t = 5;
+	int t = 4;
 	
 	while ( t-- ) {	
 		for ( int i = 0; i < 4096; ++i ) {
@@ -161,16 +161,16 @@ void vector_testint() {
 		for ( int i = 0; i < 4096; ++i ) 
 			v.erase(--v.end());
 			
-		for ( int i = 0; i < 16384; ++i ) 
+		for ( int i = 0; i < 16000; ++i ) 
 			v.push_back( i );
 			
-		for ( int i = 0; i < 16384; ++i ) 
+		for ( int i = 0; i < 16000; ++i ) 
 			v[i] = 0;	
 			
-		for ( int i = 0; i < 256; ++i )
+		for ( int i = 0; i < 32; ++i )
 			v.insert(v.begin(), 1);
 			
-		for ( int i = 0; i < 256; ++i )
+		for ( int i = 0; i < 32; ++i )
 			v.erase(v.begin());
 			
 		v.clear();			
@@ -221,6 +221,14 @@ void vector_testint_p() {
 		v[i] *= (i >> 1);
 		printf("%d ", v[i]);	
 	}
+	
+	printf("\n");
+	
+	for ( int i = 0; i < 128; ++i ) 
+		v.insert(v.begin(), 1);
+		
+	for ( int i = 0; i < 256; ++i ) 	
+		printf("%d ", v[i]);	
 	
 	printf("\n");
 	

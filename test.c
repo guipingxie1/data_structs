@@ -231,7 +231,7 @@ void vector_teststruct() {
 	vector v;
 	init_vector( &v );
 
-	int t = 5;
+	int t = 4;
 	
 	while ( t-- ) {	
 		for ( int i = 0; i < 4096; ++i ) {
@@ -278,23 +278,25 @@ void vector_testint() {
 		for ( int i = 0; i < 4096; ++i ) {			
 			int k = get_elem_vector( &v, i );
 			k *= (i >> 1);
-			set_elem_vector( &v, i, k );
+			set_elem_vector( &v, i, k, 0 );
 		}
 			
 		for ( int i = 0; i < 4096; ++i ) 
 			delete_at_vector( &v, get_size_vector(&v) - 1, 0 );
 			
-		for ( int i = 0; i < 16384; ++i ) 
+		for ( int i = 0; i < 16000; ++i ) 
 			push_vector( &v, i );
 			
-		for ( int i = 0; i < 16384; ++i ) 
-			set_elem_vector( &v, i, (int)0 );
+		for ( int i = 0; i < 16000; ++i ) 
+			set_elem_vector( &v, i, (int)0, 0 );
 			
-		for ( int i = 0; i < 256; ++i )
+		for ( int i = 0; i < 32; ++i )
 			insert_at_vector( &v, 0, 1 );
 			
-		for ( int i = 0; i < 256; ++i )
-			delete_at_vector( &v, 0, 0 );			
+		for ( int i = 0; i < 32; ++i )
+			delete_at_vector( &v, 0, 0 );	
+			
+		resize_vector( &v, 0, 0 );				
 	}
 	
 	destroy_vector( &v, 0 );	
@@ -311,6 +313,9 @@ void vector_testint() {
 			
 		push_vector( &vv, k );
 	}
+	
+	for ( int i = 0; i < 256; ++i )
+		destroy_vector( get_elem_vector( &vv, i ), 0 );	
 	
 	destroy_vector( &vv, 1 );	
 }
@@ -345,14 +350,22 @@ void vector_testint_p() {
 		push_vector( &v, i );
 
 	for ( int i = 0; i < 128; ++i ) 
-		printf("%d ", get_elem_vector(&v, i) );
+		printf( "%d ", get_elem_vector(&v, i) );
 
 	for ( int i = 0; i < 128; ++i ) {
 		int k = get_elem_vector( &v, i );
 		k *= i >> 1;
-		set_elem_vector( &v, i, k );
-		printf("%d ", get_elem_vector(&v, i) );	
+		set_elem_vector( &v, i, k, 0 );
+		printf( "%d ", get_elem_vector(&v, i) );	
 	}
+	
+	printf("\n");
+	
+	for ( int i = 0; i < 128; ++i ) 
+		insert_at_vector( &v, 0, 1 );
+		
+	for ( int i = 0; i < 256; ++i ) 	
+		printf( "%d ", get_elem_vector( &v, i ) );		
 		
 	destroy_vector( &v, 0 );	
 	

@@ -69,6 +69,8 @@ void destroy_stack( stack* s, int free_data );
  *	Resizes the stack (call if the max size is known before hand)
  *	Can also free all the data if the new_size is smaller than the original size
  *	To do this set the free_data parameter to a non-zero value 
+ *	Only deletes data up to the current size (get_size_stack()), everything else
+ *			that was pushed onto the stack and removed will not be freed  
  *
  * 	@param s: The stack struct we want to operate with
  * 	@param new_size: The new size we want our stack to be
