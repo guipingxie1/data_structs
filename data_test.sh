@@ -38,7 +38,7 @@ if [ "$data_struct" == "stack" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p stack
 
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of stack --- linked list implementation
@@ -64,7 +64,7 @@ if [ "$data_struct" == "vector" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p vector
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of vector --- array implementation
@@ -86,7 +86,7 @@ if [ "$data_struct" == "queue" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p queue
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of queue --- 
@@ -108,7 +108,7 @@ if [ "$data_struct" == "deque" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p deque
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of deque --- 
@@ -130,7 +130,7 @@ if [ "$data_struct" == "pqueue" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p pqueue
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of pqueue --- 
@@ -152,7 +152,7 @@ if [ "$data_struct" == "map" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p map
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of map --- 
@@ -174,7 +174,7 @@ if [ "$data_struct" == "set" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p set
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of set --- 
@@ -196,7 +196,7 @@ if [ "$data_struct" == "hash" ] || [ "$data_struct" == "all" ]
 then
 	mkdir -p hash
 	
-	echo '------------------------------------------------------------------'
+	echo '-----------------------------------------------------------------------'
 	echo ''
 	
 	echo Benchmark of hash --- 
