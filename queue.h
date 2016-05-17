@@ -29,9 +29,6 @@ typedef struct queue {
 	
 	/*	The current size of the array  */	
 	int size;
-	
-	/*	The maximum size of the array (used for freeing)  */	
-	int max_size;
 
 	/*	The maximum capacity of the array  */	
 	int capacity;
@@ -39,7 +36,7 @@ typedef struct queue {
 	/*	The first index of the array  */
 	int first;
 	
-	/*	The last index of the array  */
+	/*	The last index of the array --- may not need, can use first + size  */
 	int last;
   
 } queue;
@@ -73,6 +70,9 @@ void destroy_queue( queue* q, int free_data );
 
 /**
  *	Resizes the queue (call if the max size is known before hand)
+ *
+ *	*** IMPORTANT NOTE *** : Private function for now, may cause unexpected results
+ *
  *	Can also free all the data if the new_size is smaller than the original size
  *	To do this set the free_data parameter to a non-zero value
  *	Only deletes data up to the current size (get_size_queue()), everything else
@@ -177,6 +177,8 @@ void set_elem_queue( queue* q, int pos, void* data, int free_data );
  *
  *	NOTE: VERY SLOW
  *
+ *	*** IMPORTANT NOTE *** : Not implemented yet
+ *
  * 	@param q: The queue struct we want to operate with
  * 	@param pos: The index of the element we want to delete (0-indexed)
  * 	@param free_data: Whether we want to free the data at the position
@@ -190,6 +192,8 @@ void delete_at_queue( queue* q, int pos, int free_data );
  *	Cannot insert past the end
  *
  *	NOTE: VERY SLOW
+ *
+ *	*** IMPORTANT NOTE *** : Not implemented yet 
  *
  * 	@param q: The queue struct we want to operate with
  * 	@param pos: The index of the element we want to insert at (0-indexed) 

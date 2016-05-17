@@ -255,6 +255,91 @@ void vector_testint_p() {
 
 //-------------------------------------------------------------------
 
+void queue_teststruct() {
+	queue<tester> q;
+
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 4096; ++i ) {
+			tester x;
+			x.k = i;
+			x.c = i % 26 + 'a';
+			x.g = i * i / 3.0;
+			q.push( x );
+		}
+	
+		for ( int i = 0; i < 4096; ++i ) 
+			q.pop();
+	}
+}
+
+void queue_testint() {
+	queue<int> q;
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 16384; ++i ) 
+			q.push( i );
+	
+		for ( int i = 0; i < 16384; ++i ) 
+			q.pop();
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			q.push( i );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			q.pop();
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			q.push( i );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			q.pop();	
+	}
+}
+
+
+void queue_teststruct_p() {
+	queue<tester> q;
+	
+	for ( int i = 0; i < 64; ++i ) {
+		tester x;
+		x.k = i;
+		x.c = i % 26 + 'a';
+		x.g = i * i / 3.0;
+		q.push( x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		tester x = q.front();
+		printf("%d, %c, %f ---", x.k, x.c, x.g);
+		q.pop();
+	}
+	
+	printf("\n");
+}
+
+void queue_testint_p() {
+	queue<int> q;
+
+	for ( int i = 0; i < 128; ++i ) 
+		q.push( i );
+		
+	printf("%d ", q.size());	
+
+	for ( int i = 0; i < 128; ++i ) {
+		printf("%d - %d ", q.front(), q.back());
+		q.pop();
+	}
+	
+	printf("\n");
+}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
 	
@@ -288,7 +373,14 @@ int main( int argc, char* argv[] ) {
 		}
 	}
 	else if ( arg.compare("queue") == 0 ) {
-		
+		if ( !k ) {
+			queue_testint();
+			queue_teststruct();
+		}
+		else {
+			queue_testint_p();
+			queue_teststruct_p();
+		}
 	}
 	else if ( arg.compare("pqueue") == 0 ) {
 		

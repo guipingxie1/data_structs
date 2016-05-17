@@ -21,7 +21,6 @@ void init_queue( queue* q ) {
 	
 	q -> array = malloc( 16 * sizeof(void*) );
 	q -> size = -1;
-	q -> max_size = -1;
 	q -> capacity = 16;
 	q -> first = -1;
 	q -> last = -1;
@@ -33,8 +32,8 @@ void destroy_queue( queue* q, int free_data ) {
 	assert( q && "Queue is not valid" );
 	
 	if ( free_data ) {
-		int max = q -> max_size;
-		for ( int i = 0; i <= max; ++i ) {
+		int cap = q -> capacity;
+		for ( int i = 0; i <= cap; ++i ) {
 			free( (q -> array)[i] );
 			(q -> array)[i] = NULL;
 		}
@@ -50,7 +49,8 @@ void resize_queue( queue* q, int new_size, int free_data ) {
 	assert( q && "Queue is not valid" );
 	assert( (new_size > -1) && "Invalid size, must be non negative" );
 	assert( (new_size < QUEUE_MAX_CAP) && "New size can only be up to 131072" );
-	
+
+/*	
 	if ( q -> size > new_size ) {
 		if ( free_data ) {
 			int size = q -> size;
@@ -62,12 +62,26 @@ void resize_queue( queue* q, int new_size, int free_data ) {
 		}
 		
 		q -> size = new_size - 1;
-		q -> max_size = new_size - 1;
 	}
-		
-	q -> capacity = new_size;	
+*/
+
+	int former_cap = q -> capacity;		
+	int size = q -> size;
+	int head = q -> first;
+	q -> capacity = new_size;
 	
-	q -> array = realloc( q -> array, new_size * sizeof(void*) );
+	void** new_array = malloc( new_size * sizeof(void*) );
+	
+	/*	Traverse from the front of the queue and copies the data over  */
+	for ( int i = 0; i < size; ++i ) 
+		new_array[i] = (q -> array)[ (head + i) % former_cap ];
+	
+	free( q -> array );
+	q -> array = new_array;
+	
+	/*	Reset the first and last values so they correspond to the new array  */
+	q -> first = 0;
+	q -> last = size;
 }
 
 
@@ -92,8 +106,9 @@ int get_size_queue( queue* q ) {
 void* front_queue( queue* q ) {
 	assert( q && "Queue is not valid" );
 	assert( (q -> size > -1) && "Queue is empty" );
+	assert( (q -> first != -1) && "Queue is empty" );
 	
-	return (q -> array)[0];
+	return (q -> array)[q -> first];
 }
 
 
@@ -101,8 +116,9 @@ void* front_queue( queue* q ) {
 void* back_queue( queue* q ) {
 	assert( q && "Queue is not valid" );
 	assert( (q -> size > -1) && "Queue is empty" );
+	assert( (q -> last != -1) && "Queue is empty" );
 	
-	return (q -> array)[q -> size];
+	return (q -> array)[q -> last];
 }
 
 
@@ -112,32 +128,37 @@ void push_queue( queue* q, void* data ) {
 	assert( (1 + q -> size < QUEUE_MAX_CAP) && "Too many elements, max of 131072" );
 	assert( (q -> size < q -> capacity) && "Queue management went wrong" );
 	
+	/*	Can also use if first = last and some other conditions  */
 	if ( 1 + q -> size == q -> capacity ) {
+	/*
 		if ( q -> capacity == 0 )
 			resize_queue( q, 16, 0 );
 		else resize_queue( q, (q -> capacity) << 1, 0 );
+	*/
+	
+		resize_queue( q, (q -> capacity) << 1, 0 );	
 	}
 	
 	q -> size += 1;
-	(q -> array)[q -> size] = data;
-	
-	if ( q -> size > q -> max_size )
-		q -> max_size = q -> size;
+	q -> last = ( 1 + q -> last ) % q -> capacity;
+	(q -> array)[q -> last] = data;
 } 
 
 
 /*	Remove the last element (data) pushed into the queue  */
 void pop_queue( queue* q, int free_data ) {
 	assert( q && "Queue is not valid" );
-	assert( (q -> size > -1) && "Cannot pop from empty queue" );
+	assert( (q -> first > -1) && "Cannot pop from empty queue" );
 	assert( (q -> first != q -> last) && "Cannot pop from empty queue" );
 	
-	if ( free_data ) {
-		free( (q -> array)[q -> size] );
-		(q -> array)[q -> size] = NULL;
-	}
+	if ( free_data ) 
+		free( (q -> array)[q -> first] );
+
+	/*	Sets to NULL because for destroy, we free everything  */
+	(q -> array)[q -> first] = NULL;
 	
 	q -> size -= 1;
+	q -> first = ( 1 + q -> first ) % q -> capacity;
 }
 
 
@@ -146,7 +167,7 @@ void* get_elem_queue( queue* q, int pos ) {
 	assert( q && "Queue is not valid" );
 	assert( (pos > -1 && pos <= q -> size) && "Invalid index" );
 	
-	return (q -> array)[pos];
+	return (q -> array)[ (pos + q -> first ) % q -> capacity ];
 } 
 
 
@@ -155,10 +176,12 @@ void set_elem_queue( queue* q, int pos, void* data, int free_data ) {
 	assert( q && "Queue is not valid" );
 	assert( (pos > -1 && pos <= q -> size) && "Invalid index" );
 	
-	if ( free_data ) 
-		free( (q -> array)[pos] );
+	int idx = (pos + q -> first ) % q -> capacity;
 	
-	(q -> array)[pos] = data;
+	if ( free_data ) 
+		free( (q -> array)[idx] );
+	
+	(q -> array)[idx] = data;
 }
 
 
