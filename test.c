@@ -397,6 +397,104 @@ void vector_testint_p() {
 
 //-------------------------------------------------------------------
 
+void queue_teststruct() {
+	queue q;
+	init_queue( &q );
+
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 4096; ++i ) {
+			struct tester* x = malloc( sizeof(struct tester) );
+			x -> k = i;
+			x -> c = i % 26 + 'a';
+			x -> g = i * i / 3.0;
+			push_queue( &q, x );
+		}
+	
+		for ( int i = 0; i < 4096; ++i ) 
+			pop_queue( &q, 1 );
+	}
+	
+	destroy_queue( &q, 0 );
+}
+
+void queue_testint() {
+	queue q;
+	init_queue( &q );
+	
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 16384; ++i ) 
+			push_queue( &q, i );
+	
+		for ( int i = 0; i < 16384; ++i ) 
+			pop_queue( &q, 0 );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			push_queue( &q, i );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			pop_queue( &q, 0 );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			push_queue( &q, i );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			pop_queue( &q, 0 );
+	}
+	
+	destroy_queue( &q, 0 );
+}
+
+
+void queue_teststruct_p() {
+	queue q;
+	init_queue( &q );
+	
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_queue( &q, x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* x = front_queue( &q );
+		printf("%d, %c, %f ---", x -> k, x -> c, x -> g);
+		pop_queue( &q, 1 );
+	}
+	
+	printf("\n");
+	
+	destroy_queue( &q, 0 );
+}
+
+void queue_testint_p() {
+	queue q;
+	init_queue( &q );
+
+	for ( int i = 0; i < 128; ++i ) 
+		push_queue( &q, i );
+		
+	printf("%d ", get_size_queue(&q) );
+
+	for ( int i = 0; i < 128; ++i ) {
+		printf("%d - %d ", front_queue(&q), back_queue(&q) );
+		pop_queue( &q, 0 );
+	}
+	
+	printf("\n");
+	
+	destroy_queue( &q, 0 );
+}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
 	
@@ -440,7 +538,14 @@ int main( int argc, char* argv[] ) {
 		}
 	}
 	else if ( strcmp(arg, "queue") == 0 ) {
-		
+		if ( !k ) {
+			queue_testint();
+			queue_teststruct();
+		}
+		else {
+			queue_testint_p();
+			queue_teststruct_p();
+		}
 	}
 	else if ( strcmp(arg, "pqueue") == 0 ) {
 		

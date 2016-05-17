@@ -73,7 +73,7 @@ void resize_queue( queue* q, int new_size, int free_data ) {
 	void** new_array = malloc( new_size * sizeof(void*) );
 	
 	/*	Traverse from the front of the queue and copies the data over  */
-	for ( int i = 0; i < size; ++i ) 
+	for ( int i = 0; i <= size; ++i ) 
 		new_array[i] = (q -> array)[ (head + i) % former_cap ];
 	
 	free( q -> array );
@@ -142,6 +142,9 @@ void push_queue( queue* q, void* data ) {
 	q -> size += 1;
 	q -> last = ( 1 + q -> last ) % q -> capacity;
 	(q -> array)[q -> last] = data;
+	
+	if ( q -> size == 0 )
+		q -> first = q -> last;
 } 
 
 
@@ -149,7 +152,7 @@ void push_queue( queue* q, void* data ) {
 void pop_queue( queue* q, int free_data ) {
 	assert( q && "Queue is not valid" );
 	assert( (q -> first > -1) && "Cannot pop from empty queue" );
-	assert( (q -> first != q -> last) && "Cannot pop from empty queue" );
+	assert( (q -> first != 1 + q -> last) && "Cannot pop from empty queue" );
 	
 	if ( free_data ) 
 		free( (q -> array)[q -> first] );

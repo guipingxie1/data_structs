@@ -90,7 +90,7 @@ then
 	echo ''
 	
 	echo Benchmark of queue --- 
-	
+	./bench ./test queue queue/queue.txt
 	
 	echo Benchmark of std::queue --- c++ library
 	./bench ./stl_test queue queue/stl_queue.txt
