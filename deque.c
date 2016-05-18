@@ -74,7 +74,7 @@ void* back_deque( deque* d ) {
 	assert( d && "Deque is not valid" );
 	assert( d -> size && "Deque is empty" );
 	
-	return (d -> array)[d -> last - 1];
+	return (d -> array)[ (d -> last + d -> capacity - 1) % d -> capacity ];
 }
 
 
@@ -111,8 +111,8 @@ void push_front_deque( deque* d, void* data ) {
 /*	Remove the last element (data) of the deque  */
 void pop_back_deque( deque* d, int free_data ) {
 	assert( d && "Deque is not valid" );
-	assert( d -> last && "Cannot pop from empty deque" );
-	assert( (d -> first != d -> last) && "Cannot pop from empty deque" );
+	assert( d -> size && "Cannot pop from empty deque" );
+	//assert( (d -> first != d -> last) && "Cannot pop from empty deque" );
 	
 	d -> size -= 1;
 	d -> last = ( d -> last + d -> capacity - 1 ) % d -> capacity;
@@ -129,7 +129,7 @@ void pop_back_deque( deque* d, int free_data ) {
 void pop_front_deque( deque* d, int free_data ) {
 	assert( d && "Deque is not valid" );
 	assert( (d -> first > -1) && "Cannot pop from empty deque" );
-	assert( (d -> first != d -> last) && "Cannot pop from empty deque" );
+	//assert( (d -> first != d -> last) && "Cannot pop from empty deque" );
 	
 	if ( free_data ) 
 		free( (d -> array)[d -> first] );
