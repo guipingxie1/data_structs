@@ -44,47 +44,6 @@ void destroy_queue( queue* q, int free_data ) {
 }
 
 
-/*	Resizes the queue  */
-void resize_queue( queue* q, int new_size, int free_data ) {
-	assert( q && "Queue is not valid" );
-	assert( (new_size > -1) && "Invalid size, must be non negative" );
-	assert( (new_size < QUEUE_MAX_CAP) && "New size can only be up to 131072" );
-
-/*	
-	if ( q -> size > new_size ) {
-		if ( free_data ) {
-			int size = q -> size;
-			
-			for ( int i = new_size; i <= size; ++i ) {
-				free( (q -> array)[i] );
-				(q -> array)[i] = NULL;
-			}
-		}
-		
-		q -> size = new_size - 1;
-	}
-*/
-
-	int former_cap = q -> capacity;		
-	int size = q -> size;
-	int head = q -> first;
-	q -> capacity = new_size;
-	
-	void** new_array = malloc( new_size * sizeof(void*) );
-	
-	/*	Traverse from the front of the queue and copies the data over  */
-	for ( int i = 0; i <= size; ++i ) 
-		new_array[i] = (q -> array)[ (head + i) % former_cap ];
-	
-	free( q -> array );
-	q -> array = new_array;
-	
-	/*	Reset the first and last values so they correspond to the new array  */
-	q -> first = 0;
-	q -> last = size;
-}
-
-
 /*	Checks if the queue is empty or not  */
 int is_empty_queue( queue* q ) {
 	assert( q && "Queue is not valid" );
@@ -185,6 +144,51 @@ void set_elem_queue( queue* q, int pos, void* data, int free_data ) {
 		free( (q -> array)[idx] );
 	
 	(q -> array)[idx] = data;
+}
+
+
+// ---------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
+
+
+/*	Resizes the queue  */
+void resize_queue( queue* q, int new_size, int free_data ) {
+	assert( q && "Queue is not valid" );
+	assert( (new_size > -1) && "Invalid size, must be non negative" );
+	assert( (new_size < QUEUE_MAX_CAP) && "New size can only be up to 131072" );
+
+/*	
+	if ( q -> size > new_size ) {
+		if ( free_data ) {
+			int size = q -> size;
+			
+			for ( int i = new_size; i <= size; ++i ) {
+				free( (q -> array)[i] );
+				(q -> array)[i] = NULL;
+			}
+		}
+		
+		q -> size = new_size - 1;
+	}
+*/
+
+	int former_cap = q -> capacity;		
+	int size = q -> size;
+	int head = q -> first;
+	q -> capacity = new_size;
+	
+	void** new_array = malloc( new_size * sizeof(void*) );
+	
+	/*	Traverse from the front of the queue and copies the data over  */
+	for ( int i = 0; i <= size; ++i ) 
+		new_array[i] = (q -> array)[ (head + i) % former_cap ];
+	
+	free( q -> array );
+	q -> array = new_array;
+	
+	/*	Reset the first and last values so they correspond to the new array  */
+	q -> first = 0;
+	q -> last = size;
 }
 
 

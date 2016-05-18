@@ -69,25 +69,6 @@ void destroy_queue( queue* q, int free_data );
 
 
 /**
- *	Resizes the queue (call if the max size is known before hand)
- *
- *	*** IMPORTANT NOTE *** : Private function for now, may cause unexpected results
- *
- *	Can also free all the data if the new_size is smaller than the original size
- *	To do this set the free_data parameter to a non-zero value
- *	Only deletes data up to the current size (get_size_queue()), everything else
- *			that was put onto the queue and removed will not be freed 
- *
- *	Resizing to new_size of 0 is equivalent to clearing the whole queue
- *
- * 	@param q: The queue struct we want to operate with
- * 	@param new_size: The new size we want our queue to be
- * 	@param free_data: Whether we want to free the data if new_size if smaller
- */
-void resize_queue( queue* q, int new_size, int free_data );
-
-
-/**
  *	Checks if the queue is empty or not
  *
  * 	@param q: The queue struct we want to operate with
@@ -170,6 +151,10 @@ void* get_elem_queue( queue* q, int pos );
 void set_elem_queue( queue* q, int pos, void* data, int free_data ); 
 
 
+// ---------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
+
+
 /**
  *	Deletes the entry at the provided position and shifts everything after it
  *	Will free the data if the free_data parameter is non zero
@@ -200,6 +185,25 @@ void delete_at_queue( queue* q, int pos, int free_data );
  * 	@param data: The data we want to insert into the queue 
  */
 void insert_at_queue( queue* q, int pos, void* data ); 
+
+
+/**
+ *	Resizes the queue (call if the max size is known before hand)
+ *
+ *	*** IMPORTANT NOTE *** : Private function for now, may cause unexpected results
+ *
+ *	Can also free all the data if the new_size is smaller than the original size
+ *	To do this set the free_data parameter to a non-zero value
+ *	Only deletes data up to the current size (get_size_queue()), everything else
+ *			that was put onto the queue and removed will not be freed 
+ *
+ *	Resizing to new_size of 0 is equivalent to clearing the whole queue
+ *
+ * 	@param q: The queue struct we want to operate with
+ * 	@param new_size: The new size we want our queue to be
+ * 	@param free_data: Whether we want to free the data if new_size if smaller
+ */
+void resize_queue( queue* q, int new_size, int free_data );
 
 
 #endif
