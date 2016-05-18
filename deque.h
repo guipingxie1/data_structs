@@ -33,10 +33,10 @@ typedef struct deque {
 	/*	The maximum capacity of the array  */	
 	int capacity;
 	
-	/*	The first index of the array  */
+	/*	The first index of the array --- one before the end */
 	int first;
 	
-	/*	The last index of the array --- may not need, can use first + size  */
+	/*	The last index of the array --- one past the end  */
 	int last;
   
 } deque;
@@ -46,10 +46,10 @@ typedef struct deque {
  *	Initialize the deque --- similar to a constructor in C++
  *	Can be called with either :
  *			deque* d = malloc( sizeof(deque) );
- *			init_deque( q ); 
+ *			init_deque( d ); 
  *	OR
- *			deque q;
- *			init_deque( &q ); 		
+ *			deque d;
+ *			init_deque( &d ); 		
  *
  * 	@param d: The deque struct we want to operate with
  */

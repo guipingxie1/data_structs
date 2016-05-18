@@ -112,7 +112,7 @@ then
 	echo ''
 	
 	echo Benchmark of deque --- 
-	
+	#./bench ./test deque deque/deque.txt
 	
 	echo Benchmark of std::deque --- c++ library
 	./bench ./stl_test deque deque/stl_deque.txt

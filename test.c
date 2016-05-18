@@ -495,6 +495,131 @@ void queue_testint_p() {
 
 //-------------------------------------------------------------------
 
+void deque_teststruct() {
+	deque d;
+	init_deque( &d );
+
+	int t = 2;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 4096; ++i ) {
+			struct tester* x = malloc( sizeof(struct tester) );
+			x -> k = i;
+			x -> c = i % 26 + 'a';
+			x -> g = i * i / 3.0;
+			push_back_deque( &d, x );
+		}
+		
+		for ( int i = 4096; i < 8192; ++i ) {
+			struct tester* x = malloc( sizeof(struct tester) );
+			x -> k = i;
+			x -> c = i % 26 + 'a';
+			x -> g = i * i / 3.0;
+			push_front_deque( &d, x );
+		}
+	
+		for ( int i = 0; i < 4096; ++i ) 
+			pop_front_deque( &d, 1 );
+			
+		for ( int i = 0; i < 4096; ++i ) 
+			pop_back_deque( &d, 1 );
+	}
+	
+	destroy_deque( &d, 0 );
+}
+
+void deque_testint() {
+	deque d;
+	init_deque( &d );
+	
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 16384; ++i ) 
+			push_front_deque( &d, i );
+	
+		for ( int i = 0; i < 16384; ++i ) 
+			pop_back_deque( &d, 0 );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			push_back_deque( &d, i );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			pop_front_deque( &d, 0 );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			push_back_deque( &d, i );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			pop_back_deque( &d, 0 );
+	}
+	
+	destroy_deque( &d, 0 );
+}
+
+
+void deque_teststruct_p() {
+	deque d;
+	init_deque( &d );
+	
+	for ( int i = 0; i < 32; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_back_deque( &d, x );
+	}
+	
+	for ( int i = 32; i < 64; ++i ) {
+		struct tester* x = malloc( sizeof(struct tester) );
+		x -> k = i;
+		x -> c = i % 26 + 'a';
+		x -> g = i * i / 3.0;
+		push_front_deque( &d, x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		struct tester* x = front_deque( &d );
+		printf("%d, %c, %f ---", x -> k, x -> c, x -> g);
+		struct tester* y = back_deque( &d );
+		printf("%d, %c, %f ---", y -> k, y -> c, y -> g);
+		
+		if ( i % 2 )
+			pop_back_deque( &d, 1 );
+		else pop_front_deque( &d, 1 );
+	}
+	
+	destroy_deque( &d, 0 );
+	
+	printf("\n");
+}
+
+void deque_testint_p() {
+	deque d;
+	init_deque( &d );
+
+	for ( int i = 0; i < 128; ++i ) 
+		push_back_deque( &d, i );
+		
+	printf("%d ", get_size_deque(&d));	
+
+	for ( int i = 0; i < 128; ++i ) {
+		printf("%d - %d ", front_deque(&d), back_deque(&d));
+		
+		if ( i % 2 == 0 )
+			pop_back_deque( &d, 0 );
+		else pop_front_deque( &d, 0 );
+	}
+	
+	printf("\n");
+	
+	destroy_deque( &d, 0 );
+}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
 	
@@ -551,7 +676,14 @@ int main( int argc, char* argv[] ) {
 		
 	}
 	else if ( strcmp(arg, "deque") == 0 ) {
-		
+		if ( !k ) {
+			deque_testint();
+			deque_teststruct();
+		}
+		else {
+			deque_testint_p();
+			deque_teststruct_p();
+		}
 	}
 	else if ( strcmp(arg, "hash") == 0 ) {
 		

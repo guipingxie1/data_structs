@@ -33,7 +33,7 @@ void destroy_queue( queue* q, int free_data ) {
 	
 	if ( free_data ) {
 		int cap = q -> capacity;
-		for ( int i = 0; i <= cap; ++i ) {
+		for ( int i = 0; i < cap; ++i ) {
 			free( (q -> array)[i] );
 			(q -> array)[i] = NULL;
 		}

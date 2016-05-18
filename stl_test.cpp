@@ -340,6 +340,118 @@ void queue_testint_p() {
 
 //-------------------------------------------------------------------
 
+void deque_teststruct() {
+	deque<tester> d;
+
+	int t = 2;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 4096; ++i ) {
+			tester x;
+			x.k = i;
+			x.c = i % 26 + 'a';
+			x.g = i * i / 3.0;
+			d.push_back( x );
+		}
+		
+		for ( int i = 4096; i < 8192; ++i ) {
+			tester x;
+			x.k = i;
+			x.c = i % 26 + 'a';
+			x.g = i * i / 3.0;
+			d.push_front( x );
+		}
+	
+		for ( int i = 0; i < 4096; ++i ) 
+			d.pop_front();
+			
+		for ( int i = 0; i < 4096; ++i ) 
+			d.pop_back();	
+	}
+}
+
+void deque_testint() {
+	deque<int> d;
+	int t = 5;
+	
+	while ( t-- ) {	
+		for ( int i = 0; i < 16384; ++i ) 
+			d.push_front( i );
+	
+		for ( int i = 0; i < 16384; ++i ) 
+			d.pop_back();
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			d.push_back( i );
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			d.pop_front();
+			
+		for ( int i = 0; i < 20000; ++i ) 
+			d.push_back( i );
+			
+		for ( int i = 0; i < 40000; ++i ) 
+			d.pop_back();	
+	}
+}
+
+
+void deque_teststruct_p() {
+	deque<tester> d;
+	
+	for ( int i = 0; i < 32; ++i ) {
+		tester x;
+		x.k = i;
+		x.c = i % 26 + 'a';
+		x.g = i * i / 3.0;
+		d.push_back( x );
+	}
+	
+	for ( int i = 32; i < 64; ++i ) {
+		tester x;
+		x.k = i;
+		x.c = i % 26 + 'a';
+		x.g = i * i / 3.0;
+		d.push_front( x );
+	}
+
+	for ( int i = 0; i < 64; ++i ) {
+		tester x = d.front();
+		printf("%d, %c, %f ---", x.k, x.c, x.g);
+		tester y = d.back();
+		printf("%d, %c, %f ---", y.k, y.c, y.g);
+		
+		if ( i % 2 )
+			d.pop_back();
+		else d.pop_front();
+	}
+	
+	printf("\n");
+}
+
+void deque_testint_p() {
+	deque<int> d;
+
+	for ( int i = 0; i < 128; ++i ) 
+		d.push_back( i );
+		
+	printf("%d ", d.size());	
+
+	for ( int i = 0; i < 128; ++i ) {
+		printf("%d - %d ", d.front(), d.back());
+		
+		if ( i % 2 == 0 )
+			d.pop_back();
+		else d.pop_front();
+	}
+	
+	printf("\n");
+}
+
+//-------------------------------------------------------------------
+
+//-------------------------------------------------------------------
+
 int main( int argc, char* argv[] ) {
 	assert( argc == 3 );
 	
@@ -386,7 +498,14 @@ int main( int argc, char* argv[] ) {
 		
 	}
 	else if ( arg.compare("deque") == 0 ) {
-		
+		if ( !k ) {
+			deque_testint();
+			deque_teststruct();
+		}
+		else {
+			deque_testint_p();
+			deque_teststruct_p();
+		}
 	}
 	else if ( arg.compare("hash") == 0 ) {
 		
